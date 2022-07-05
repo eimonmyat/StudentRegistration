@@ -129,7 +129,7 @@ public class CategoryForm extends JFrame {
 
                             categoryService.saveCategory(category);
                             resetFormData();
-                            JOptionPane.showMessageDialog(null, "Save successful");
+                            JOptionPane.showMessageDialog(null, "Completely Save");
                             loadAllCategories(Optional.empty());
                         } else {
                             JOptionPane.showMessageDialog(null, "Enter Required Field!");
