@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
 import entities.Category;
+import entities.Lecturer;
 import services.CategoryService;
 //import services.ProductService;
 
@@ -108,34 +110,66 @@ public class CategoryForm extends JFrame {
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	if (null != category && category.getId() != 0) {
+            	String st[]=new String[1];
+
+                if (null != category && category.getId() != 0) {
+
                     category.setName(txtCategory.getText());
-
                     if (!category.getName().isBlank()) {
-                        categoryService.updateCategory(String.valueOf(category.getId()), category);
-                        resetFormData();
-                        //JOptionPane.showMessageDialog(null, "Update successful");
-                        loadAllCategories(Optional.empty());
-                        category = null;
+                        	st[0]=(String)txtCategory.getText();
+							try {
+								boolean ee=categoryService.isduplicate(st);
+								if(ee) {
+									JOptionPane.showMessageDialog(null,"Duplicate Record");
+									resetFormData();
+									loadAllCategories(Optional.empty());
+								category=null;
+								}
+								else {
+			                        categoryService.updateCategory(String.valueOf(category.getId()), category);
+			                        resetFormData();
+			                        loadAllCategories(Optional.empty());
+			                        category = null;
+								}
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						
+
                     } else {
-                        JOptionPane.showMessageDialog(null, "Enter required field");
+                        JOptionPane.showMessageDialog(null, "Enter Required Field!");
                     }
-            	}
-                    else {
-                    	Category category = new Category();
-                        category.setName(txtCategory.getText());
+                } else {
+                    Category brand = new Category();
+                    brand.setName(txtCategory.getText());
 
-                        if (null != category.getName() && !category.getName().isBlank()) {
-
-                            categoryService.saveCategory(category);
-                            resetFormData();
-                            JOptionPane.showMessageDialog(null, "Save successful");
-                            loadAllCategories(Optional.empty());
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Enter Required Field!");
-                        }
+                    if (null != brand.getName() && !brand.getName().isBlank()) {
+                    	st[0]=(String)txtCategory.getText();
+						try {
+							boolean ee=categoryService.isduplicate(st);
+							if(ee) {
+								JOptionPane.showMessageDialog(null,"Duplicate Record");
+								resetFormData();
+								loadAllCategories(Optional.empty());
+								category=null;
+							}
+							else {
+								categoryService.saveCategory(brand);
+		                        resetFormData();
+		                        loadAllCategories(Optional.empty());
+		                        category=null;
+							}
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+                        
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Enter Required Field!");
                     }
                 }
+            }
         });
 		
 		JButton btnDelete = new JButton("Delete");
