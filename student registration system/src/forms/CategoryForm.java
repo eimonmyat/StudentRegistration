@@ -17,6 +17,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
 import entities.Category;
+import entities.Lecturer;
 import services.CategoryService;
 //import services.ProductService;
 
@@ -116,10 +117,17 @@ public class CategoryForm extends JFrame {
 		btnSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	String st[]=new String[1];
+<<<<<<< HEAD
             	
             	if (null != category && category.getId() != null) {
+=======
+
+                if (null != category && category.getId() != 0) {
+
+>>>>>>> branch 'master' of https://github.com/eimonmyat/StudentRegistration
                     category.setName(txtCategory.getText());
                     if (!category.getName().isBlank()) {
+<<<<<<< HEAD
                     	st[0]=(String)txtCategory.getText();
                     	try {
                     		boolean ee=categoryService.isduplicate(st);
@@ -142,14 +150,37 @@ public class CategoryForm extends JFrame {
                     		e1.printStackTrace();
                     	}
                         
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Enter required field");
-                    }
-            	}
-                    else {
-                    	Category category = new Category();
-                        category.setName(txtCategory.getText());
+=======
+                        	st[0]=(String)txtCategory.getText();
+							try {
+								boolean ee=categoryService.isduplicate(st);
+								if(ee) {
+									JOptionPane.showMessageDialog(null,"Duplicate Record");
+									resetFormData();
+									loadAllCategories(Optional.empty());
+								category=null;
+								}
+								else {
+			                        categoryService.updateCategory(String.valueOf(category.getId()), category);
+			                        resetFormData();
+			                        loadAllCategories(Optional.empty());
+			                        category = null;
+								}
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						
 
+>>>>>>> branch 'master' of https://github.com/eimonmyat/StudentRegistration
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Enter Required Field!");
+                    }
+                } else {
+                    Category brand = new Category();
+                    brand.setName(txtCategory.getText());
+
+<<<<<<< HEAD
                         if (null != category.getName() && !category.getName().isBlank()) {
                         	st[0]=(String)txtCategory.getText();
                         	try {
@@ -176,8 +207,34 @@ public class CategoryForm extends JFrame {
                         	else {
                             JOptionPane.showMessageDialog(null, "Enter Required Field!");
                         }
+=======
+                    if (null != brand.getName() && !brand.getName().isBlank()) {
+                    	st[0]=(String)txtCategory.getText();
+						try {
+							boolean ee=categoryService.isduplicate(st);
+							if(ee) {
+								JOptionPane.showMessageDialog(null,"Duplicate Record");
+								resetFormData();
+								loadAllCategories(Optional.empty());
+								category=null;
+							}
+							else {
+								categoryService.saveCategory(brand);
+		                        resetFormData();
+		                        loadAllCategories(Optional.empty());
+		                        category=null;
+							}
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+                        
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Enter Required Field!");
+>>>>>>> branch 'master' of https://github.com/eimonmyat/StudentRegistration
                     }
                 }
+            }
         });
 		JScrollPane scrollPane = new JScrollPane();
 		

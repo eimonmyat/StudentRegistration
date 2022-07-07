@@ -15,18 +15,28 @@ public class CategoryService implements CategoryRepo {
 	
 	private final DBConfig dbConfig=new DBConfig();
 	
+<<<<<<< HEAD
 	 public void saveCategory(String id,Category category) {
+=======
+	
+	 public void saveCategory(Category category) {
+>>>>>>> branch 'master' of https://github.com/eimonmyat/StudentRegistration
 	        try {
 
 	            PreparedStatement ps = this.dbConfig.getConnection()
+<<<<<<< HEAD
 	                    .prepareStatement("INSERT INTO CourseCategory (categoryID,categoryName)  VALUES (?,?);");
 	            ps.setString(1,id );
 	            ps.setString(2, category.getName());
+=======
+	                    .prepareStatement("INSERT INTO coursecategory (categoryName)  VALUES (?);");
+	            ps.setString(1, category.getName());
+>>>>>>> branch 'master' of https://github.com/eimonmyat/StudentRegistration
 	            ps.executeUpdate();
 	            ps.close();
 
-	        } catch (SQLException e) {
-	            //if (e instanceof MySQLIntegrityConstraintViolationException) {
+	        } catch (SQLException e) {	
+	           // if (e instanceof MySQLIntegrityConstraintViolationException) {
 	                JOptionPane.showMessageDialog(null, "Already Exists");
 	            //}
 	        }
@@ -35,7 +45,7 @@ public class CategoryService implements CategoryRepo {
 	        try {
 
 	            PreparedStatement ps = this.dbConfig.getConnection()
-	                    .prepareStatement("UPDATE courseCategory SET categoryName = ? WHERE categoryID = ?");
+	                    .prepareStatement("UPDATE coursecategory SET categoryName = ? WHERE categoryID = ?");
 
 	            ps.setString(1, category.getName());
 	            ps.setString(2, id);
@@ -50,7 +60,7 @@ public class CategoryService implements CategoryRepo {
 	 public void deleteCategory(String id) {
 		 try {
 			 PreparedStatement ps=this.dbConfig.getConnection()
-					 .prepareStatement("DELETE FROM courseCategory WHERE categoryID=?;");
+					 .prepareStatement("DELETE FROM coursecategory WHERE categoryID=?;");
 			 ps.setString(1, id);
 			 ps.executeUpdate();
 			 ps.close();
@@ -63,7 +73,7 @@ public class CategoryService implements CategoryRepo {
 	        List<Category> categoryList = new ArrayList<>();
 	        try (Statement st = this.dbConfig.getConnection().createStatement()) {
 
-	            String query = "SELECT * FROM courseCategory";
+	            String query = "SELECT * FROM coursecategory";
 
 	            ResultSet rs = st.executeQuery(query);
 
@@ -85,7 +95,11 @@ public class CategoryService implements CategoryRepo {
 
 	        try (Statement st = this.dbConfig.getConnection().createStatement()) {
 
+<<<<<<< HEAD
 	            String query = "SELECT * FROM courseCategory WHERE categoryID= '" + id + "';";
+=======
+	            String query = "SELECT * FROM coursecategory WHERE categoryID= " + id + ";";
+>>>>>>> branch 'master' of https://github.com/eimonmyat/StudentRegistration
 
 	            ResultSet rs = st.executeQuery(query);
 
@@ -100,6 +114,7 @@ public class CategoryService implements CategoryRepo {
 
 	        return category;
 	    }
+<<<<<<< HEAD
 	 public String getAutoId(String field,String prefix) {
 		 try (Statement st = this.dbConfig.getConnection().createStatement()) {
 			 String query="SELECT "+field+" from courseCategory";
@@ -160,4 +175,24 @@ public class CategoryService implements CategoryRepo {
 			 return false;
 		 }
 	 }
+=======
+	 
+	 public  boolean isduplicate(String[] data) throws SQLException {
+			String query="select * from coursecategory where categoryName='"+data[0]+"'";
+			Statement st = this.dbConfig.getConnection().createStatement();
+			  ResultSet rs;
+			try {
+				rs = st.executeQuery(query);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			rs=st.executeQuery(query);
+			if(rs.next())
+				   return true;
+			   else
+				   return false;
+			  
+			   }
+>>>>>>> branch 'master' of https://github.com/eimonmyat/StudentRegistration
 }
