@@ -5,7 +5,7 @@ import java.util.List;
 import entities.Category;
 
 public interface CategoryRepo {
-    void saveCategory(Category category);
+    void saveCategory(String id,Category category);
 
     void updateCategory(String id, Category category);
 
@@ -14,4 +14,5 @@ public interface CategoryRepo {
     Category findById(String id);
 
     void deleteCategory(String id);
+    String getAutoId(String field,String prefix);
 }

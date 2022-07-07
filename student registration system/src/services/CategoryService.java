@@ -15,13 +15,13 @@ public class CategoryService implements CategoryRepo {
 	
 	private final DBConfig dbConfig=new DBConfig();
 	
-	 public void saveCategory(Category category) {
+	 public void saveCategory(String id,Category category) {
 	        try {
 
 	            PreparedStatement ps = this.dbConfig.getConnection()
-	                    .prepareStatement("INSERT INTO CourseCategory (categoryName)  VALUES (?);");
-
-	            ps.setString(1, category.getName());
+	                    .prepareStatement("INSERT INTO CourseCategory (categoryID,categoryName)  VALUES (?,?);");
+	            ps.setString(1,id );
+	            ps.setString(2, category.getName());
 	            ps.executeUpdate();
 	            ps.close();
 
@@ -69,7 +69,7 @@ public class CategoryService implements CategoryRepo {
 
 	            while (rs.next()) {
 	                Category c = new Category();
-	                c.setId((rs.getInt("categoryID")));
+	                c.setId(rs.getString("categoryID"));
 	                c.setName(rs.getString("categoryName"));
 	                categoryList.add(c);
 	            }
@@ -85,12 +85,12 @@ public class CategoryService implements CategoryRepo {
 
 	        try (Statement st = this.dbConfig.getConnection().createStatement()) {
 
-	            String query = "SELECT * FROM courseCategory WHERE categoryID= " + id + ";";
+	            String query = "SELECT * FROM courseCategory WHERE categoryID= '" + id + "';";
 
 	            ResultSet rs = st.executeQuery(query);
 
 	            while (rs.next()) {
-	                category.setId(rs.getInt("categoryID"));
+	                category.setId(rs.getString("categoryID"));
 	                category.setName(rs.getString("categoryName"));
 	            }
 
@@ -100,4 +100,47 @@ public class CategoryService implements CategoryRepo {
 
 	        return category;
 	    }
+	 public String getAutoId(String field,String prefix) {
+		 try (Statement st = this.dbConfig.getConnection().createStatement()) {
+			 String query="SELECT "+field+" from courseCategory";
+			 ResultSet rs=st.executeQuery(query);
+			 ArrayList<String> result=new ArrayList<String>();
+			 int current;
+			 while(rs.next()) {
+				 result.add(rs.getString(field));
+			 }
+			 if(result.size()>0) {
+				 current=Integer.parseInt(result.get(result.size()-1).toString().substring(2,10))+1;
+				
+				 if(current>0 && current<=9) {
+					 return prefix+"0000000"+current;
+				 }
+				 else if(current>9 && current<=99) {
+					 return prefix+"000000"+current;
+				 }
+				 else if(current>99 && current<=999) {
+					 return prefix+"00000"+current;
+				 }
+				 else if(current>999 && current<=9999) {
+					 return prefix+"0000"+current;
+				 }
+				 else if(current>9999 && current<=99999) {
+					 return prefix+"000"+current;
+				 }
+				 else if(current>99999 && current<=999999) {
+					 return prefix+"00"+current;
+				 }
+				 else if(current>999999 && current<=9999999) {
+					 return prefix+"0"+current;
+				 }
+				 else if(current>9999999 && current<=99999999) {
+					 return prefix+current;
+				 }
+				 }
+		 }catch(SQLException e) {
+			 //e.printStackTrace();
+		 }
+		 return prefix+"00000001";
+		 
+	 }
 }
