@@ -213,7 +213,7 @@ public class CategoryForm extends JFrame {
 						try {
 							boolean ee=categoryService.isduplicate(st);
 							if(ee) {
-								JOptionPane.showMessageDialog(null,"Duplicate Record");
+								JOptionPane.showMessageDialog(null,"Duplicate Record! Enter again.");
 								resetFormData();
 								loadAllCategories(Optional.empty());
 								category=null;
