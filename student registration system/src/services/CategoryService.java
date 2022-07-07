@@ -143,4 +143,21 @@ public class CategoryService implements CategoryRepo {
 		 return prefix+"00000001";
 		 
 	 }
+	 public boolean isduplicate(String[]data)throws SQLException{
+		 String query="Select * from coursecategory where categoryName='"+data[0]+"'";
+		 Statement st=this.dbConfig.getConnection().createStatement();
+		 ResultSet rs;
+		 try {
+			 rs=st.executeQuery(query);
+		 }catch(SQLException e) {
+			 e.printStackTrace();
+		 }
+		 rs=st.executeQuery(query);
+		 if(rs.next()) {
+			 return true;
+		 }
+		 else {
+			 return false;
+		 }
+	 }
 }

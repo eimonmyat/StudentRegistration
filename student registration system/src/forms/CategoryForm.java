@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -114,16 +115,33 @@ public class CategoryForm extends JFrame {
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	String st[]=new String[1];
+            	
             	if (null != category && category.getId() != null) {
                     category.setName(txtCategory.getText());
-
                     if (!category.getName().isBlank()) {
-                        categoryService.updateCategory(txtCategoryID.getText(), category);
-                        resetFormData();
-                        autoID();
-                        //JOptionPane.showMessageDialog(null, "Update successful");
-                        loadAllCategories(Optional.empty());
-                        category = null;
+                    	st[0]=(String)txtCategory.getText();
+                    	try {
+                    		boolean ee=categoryService.isduplicate(st);
+                    		if(ee) {
+                    			JOptionPane.showMessageDialog(null, "Duplicate Record");
+                    			autoID();
+                    			resetFormData();
+                    			loadAllCategories(Optional.empty());
+                    			category=null;
+                    		}
+                    		else {
+                    			categoryService.updateCategory(txtCategoryID.getText(), category);
+                                resetFormData();
+                                autoID();
+                                //JOptionPane.showMessageDialog(null, "Update successful");
+                                loadAllCategories(Optional.empty());
+                                category = null;
+                    		}
+                    	}catch(SQLException e1) {
+                    		e1.printStackTrace();
+                    	}
+                        
                     } else {
                         JOptionPane.showMessageDialog(null, "Enter required field");
                     }
@@ -133,13 +151,29 @@ public class CategoryForm extends JFrame {
                         category.setName(txtCategory.getText());
 
                         if (null != category.getName() && !category.getName().isBlank()) {
+                        	st[0]=(String)txtCategory.getText();
+                        	try {
+                        		boolean ee=categoryService.isduplicate(st);
+                        		if(ee) {
+                        			JOptionPane.showMessageDialog(null, "Duplicate Record");
+                        			autoID();
+                        			resetFormData();
+                        			loadAllCategories(Optional.empty());
+                        			category=null;
+                        		}else
+                        		{
+                        			categoryService.saveCategory(txtCategoryID.getText(),category);
+                                    resetFormData();
+                                    autoID();
+                                    JOptionPane.showMessageDialog(null, "Save successful");
+                                    loadAllCategories(Optional.empty());
+                        		}
 
-                            categoryService.saveCategory(txtCategoryID.getText(),category);
-                            resetFormData();
-                            autoID();
-                            JOptionPane.showMessageDialog(null, "Save successful");
-                            loadAllCategories(Optional.empty());
-                        } else {
+                        } catch(SQLException e2) {
+                        	e2.printStackTrace();
+                        }
+                        }
+                        	else {
                             JOptionPane.showMessageDialog(null, "Enter Required Field!");
                         }
                     }
