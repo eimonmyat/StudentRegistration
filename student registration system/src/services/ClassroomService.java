@@ -5,40 +5,42 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import shared.exception.AppException;
 
 import javax.swing.JOptionPane;
 
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 
 import config.DBConfig;
-import entities.Category;
-import repositories.CategoryRepo;
-public class CategoryService implements CategoryRepo {
+import entities.Classroom;
+import repositories.ClassroomRepo;
+public class ClassroomService implements ClassroomRepo {
 	
 	private final DBConfig dbConfig=new DBConfig();
-	 public void saveCategory(String id,Category category) {
+	 public void saveClassroom(String id,Classroom classroom) {
 	        try {
 
 	            PreparedStatement ps = this.dbConfig.getConnection()
-	                    .prepareStatement("INSERT INTO courseCategory (categoryID,categoryName)  VALUES (?,?);");
+	                    .prepareStatement("INSERT INTO classroom (classroomID,classroomName)  VALUES (?,?);");
 	            ps.setString(1,id );
-	            ps.setString(2, category.getName());
+	            ps.setString(2, classroom.getName());
 	            ps.executeUpdate();
 	            ps.close();
+	            JOptionPane.showMessageDialog(null, "Save");
 
 	        } catch (SQLException e) {	
-	            //if (e instanceof MySQLIntegrityConstraintViolationException) {
+	           //if (e instanceof MySQLIntegrityConstraintViolationException) {
 	                JOptionPane.showMessageDialog(null, "Already Exists");
 	            //}
 	        }
 	    }
-	 public void updateCategory(String id, Category category) {
+	 public void updateClassroom(String id, Classroom classroom) {
 	        try {
 
 	            PreparedStatement ps = this.dbConfig.getConnection()
-	                    .prepareStatement("UPDATE courseCategory SET categoryName = ? WHERE categoryID = ?");
+	                    .prepareStatement("UPDATE classroom SET classroomName = ? WHERE classroomID = ?");
 
-	            ps.setString(1, category.getName());
+	            ps.setString(1, classroom.getName());
 	            ps.setString(2, id);
 	            ps.executeUpdate();
 
@@ -48,10 +50,10 @@ public class CategoryService implements CategoryRepo {
 	            e.printStackTrace();
 	        }
 	    }
-	 public void deleteCategory(String id) {
+	 public void deleteClassroom(String id) {
 		 try {
 			 PreparedStatement ps=this.dbConfig.getConnection()
-					 .prepareStatement("DELETE FROM courseCategory WHERE categoryID=?;");
+					 .prepareStatement("DELETE FROM classroom WHERE classroomID=?;");
 			 ps.setString(1, id);
 			 ps.executeUpdate();
 			 ps.close();
@@ -59,40 +61,40 @@ public class CategoryService implements CategoryRepo {
 			 e.printStackTrace();
 		 }
 	 }
-	 public List<Category> findAllCategories() {
+	 public List<Classroom> findAllCategories() {
 
-	        List<Category> categoryList = new ArrayList<>();
+	        List<Classroom> classroomList = new ArrayList<>();
 	        try (Statement st = this.dbConfig.getConnection().createStatement()) {
 
-	            String query = "SELECT * FROM courseCategory";
+	            String query = "SELECT * FROM classroom";
 
 	            ResultSet rs = st.executeQuery(query);
 
 	            while (rs.next()) {
-	                Category c = new Category();
-	                c.setId(rs.getString("categoryID"));
-	                c.setName(rs.getString("categoryName"));
-	                categoryList.add(c);
+	                Classroom c = new Classroom();
+	                c.setId(rs.getString("classroomID"));
+	                c.setName(rs.getString("classroomName"));
+	                classroomList.add(c);
 	            }
 
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }
 
-	        return categoryList;
+	        return classroomList;
 	    }
-	 public Category findById(String id) {
-	        Category category = new Category();
+	 public Classroom findById(String id) {
+	        Classroom category = new Classroom();
 
 	        try (Statement st = this.dbConfig.getConnection().createStatement()) {
 
 
-	            String query = "SELECT * FROM courseCategory WHERE categoryID= '" + id + "';";
+	            String query = "SELECT * FROM classroom WHERE classroomID= '" + id + "';";
 	            ResultSet rs = st.executeQuery(query);
 
 	            while (rs.next()) {
-	                category.setId(rs.getString("categoryID"));
-	                category.setName(rs.getString("categoryName"));
+	                category.setId(rs.getString("classroomID"));
+	                category.setName(rs.getString("classroomName"));
 	            }
 
 	        } catch (SQLException e) {
@@ -103,7 +105,7 @@ public class CategoryService implements CategoryRepo {
 	    }
 	 public String getAutoId(String field,String prefix) {
 		 try (Statement st = this.dbConfig.getConnection().createStatement()) {
-			 String query="SELECT "+field+" from courseCategory";
+			 String query="SELECT "+field+" from classroom";
 			 ResultSet rs=st.executeQuery(query);
 			 ArrayList<String> result=new ArrayList<String>();
 			 int current;
@@ -145,7 +147,7 @@ public class CategoryService implements CategoryRepo {
 		 
 	 }
 	 /*public boolean isduplicate(String[]data)throws SQLException{
-		 String query="Select * from courseCategory where categoryName='"+data[0]+"'";
+		 String query="Select * from classroom where classroomName='"+data[0]+"'";
 		 Statement st=this.dbConfig.getConnection().createStatement();
 		 ResultSet rs;
 		 try {

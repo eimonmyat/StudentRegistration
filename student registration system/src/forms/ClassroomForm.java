@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -17,9 +16,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
-import entities.Category;
-//import entities.Lecturer;
-import services.CategoryService;
+import entities.Classroom;
+import services.ClassroomService;
 //import services.ProductService;
 
 import javax.swing.GroupLayout;
@@ -32,17 +30,16 @@ import java.awt.Color;
 import javax.swing.JScrollPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-public class CategoryForm extends JFrame {
+public class ClassroomForm extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtCategory;
-	private Category category;
-	private CategoryService categoryService;
+	private JTextField txtClassroom;
+	private Classroom classroom;
+	private ClassroomService ClassroomService;
 	private DefaultTableModel dtm=new DefaultTableModel();
-	private List<Category> origianlCategoryList = new ArrayList<>();
-	private JTable tblCategory;
-	private JTextField txtCategoryID;
-	private Vector vid=new Vector();
+	private List<Classroom> origianlClassroomList = new ArrayList<>();
+	private JTable tblClassroom;
+	private JTextField txtClassroomID;
 	
 	/**
 	 * Launch the application.
@@ -51,7 +48,7 @@ public class CategoryForm extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CategoryForm frame = new CategoryForm();
+					ClassroomForm frame = new ClassroomForm();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -59,7 +56,7 @@ public class CategoryForm extends JFrame {
 			}
 		});
 	}
-	public CategoryForm() {
+	public ClassroomForm() {
         initialize();
         initializeDependency();
         autoID();
@@ -67,15 +64,14 @@ public class CategoryForm extends JFrame {
         this.loadAllCategories(Optional.empty());
     }
 	
-	private void loadAllCategories(Optional<List<Category>> optionalCategories) {
+	private void loadAllCategories(Optional<List<Classroom>> optionalClassrooms) {
         this.dtm.getDataVector().removeAllElements();
         this.dtm.fireTableDataChanged();
 
-        this.origianlCategoryList = this.categoryService.findAllCategories();
-        List<Category> categoryList = optionalCategories.orElseGet(() -> origianlCategoryList);
-        
-        
-        categoryList.forEach(c -> {
+        this.origianlClassroomList = this.ClassroomService.findAllCategories();
+        List<Classroom> classroomList = optionalClassrooms.orElseGet(() -> origianlClassroomList);
+
+        classroomList.forEach(c -> {
             Object[] row = new Object[2];
             row[0] = c.getId();
             row[1] = c.getName();
@@ -86,20 +82,20 @@ public class CategoryForm extends JFrame {
     private void setTableDesign() {
     	//dtm.addColumn("No");
         dtm.addColumn("ID");
-        dtm.addColumn("Category");
-        this.tblCategory.setModel(dtm);
+        dtm.addColumn("Classroom");
+        this.tblClassroom.setModel(dtm);
     }
 
     private void autoID() {
-    	txtCategoryID.setText(String.valueOf((categoryService.getAutoId("categoryID","C-"))));
+    	txtClassroomID.setText(String.valueOf((ClassroomService.getAutoId("classroomID","R-"))));
     }
     
     private void initializeDependency() {
-        this.categoryService = new CategoryService();
-        //this.categoryService.setProductRepo(new ProductService());
+        this.ClassroomService = new ClassroomService();
+        //this.ClassroomService.setProductRepo(new ProductService());
     }
 	private void resetFormData() {
-        txtCategory.setText("");
+        txtClassroom.setText("");
 	}
 	/**
 	 * Create the frame.
@@ -111,40 +107,40 @@ public class CategoryForm extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		JLabel lblNewLabel = new JLabel("Category Id");
-		txtCategoryID = new JTextField();
-		txtCategoryID.setEditable(false);
-		txtCategoryID.setColumns(10);
+		JLabel lblNewLabel = new JLabel("Classroom Id");
+		txtClassroomID = new JTextField();
+		txtClassroomID.setEditable(false);
+		txtClassroomID.setColumns(10);
+		
 		
 		
 		
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (null != category && category.getId() != null) {
-                    category.setName(txtCategory.getText());
-                    if (!category.getName().isBlank()) {
-                    			categoryService.updateCategory(txtCategoryID.getText(), category);
-                                resetFormData();
-                                autoID();
-                                //JOptionPane.showMessageDialog(null, "Update successful");
-                                loadAllCategories(Optional.empty());
-                                category = null;
-						
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Enter Required Field!");
-                    }
-                } else {
-                    Category category = new Category();
-                    category.setName(txtCategory.getText());
+            	if (null != classroom && classroom.getId() != null) {
+            		classroom.setName(txtClassroom.getText());
+                    if (!classroom.getName().isBlank()) {
+                    	ClassroomService.updateClassroom(txtClassroomID.getText(), classroom);
+                    	resetFormData();
+                    	autoID();
+                    	loadAllCategories(Optional.empty());
+                    	classroom = null;
+            	}else {
+            		JOptionPane.showMessageDialog(null, "Enter Required Field");
+            	}
+            	}else {
+                    Classroom classroom = new Classroom();
+                    classroom.setName(txtClassroom.getText());
 
-                        if (null != category.getName() && !category.getName().isBlank()) {
-                        			categoryService.saveCategory(txtCategoryID.getText(),category);
+
+                        if (null != classroom.getName() && !classroom.getName().isBlank()) {
+                        			ClassroomService.saveClassroom(txtClassroomID.getText(),classroom);
                                     resetFormData();
                                     autoID();
-                                    
                                     loadAllCategories(Optional.empty());
-                        }
+                        		}
+                        
                         	else {
                             JOptionPane.showMessageDialog(null, "Enter Required Field!");
                         }
@@ -154,10 +150,9 @@ public class CategoryForm extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		
 		
-		
-		JLabel lblNewLabel_1 = new JLabel("Category Name");
-		txtCategory = new JTextField();
-		txtCategory.setColumns(10);
+		JLabel lblNewLabel_1 = new JLabel("Classroom Name");
+		txtClassroom = new JTextField();
+		txtClassroom.setColumns(10);
 		
 		JButton btnClose = new JButton("Close");
 		//btnClose.addActionListener(new ActionListener() {
@@ -170,15 +165,15 @@ public class CategoryForm extends JFrame {
 		JButton btnDelete = new JButton("Delete");
 	        btnDelete.addActionListener(new ActionListener() {
 	            public void actionPerformed(ActionEvent e) {
-	                if (null != category) {
-	                    categoryService.deleteCategory(category.getId() + "");
+	                if (null != classroom) {
+	                    ClassroomService.deleteClassroom(classroom.getId() + "");
 	                    JOptionPane.showMessageDialog(null, "Delete successfully");
 	                    resetFormData();
 	                    autoID();
 	                    loadAllCategories(Optional.empty());
-	                    category = null;
+	                    classroom = null;
 	                } else {
-	                    JOptionPane.showMessageDialog(null, "Choose Category");
+	                    JOptionPane.showMessageDialog(null, "Choose classroom");
 	                }
 	            }
 	        });
@@ -205,8 +200,8 @@ public class CategoryForm extends JFrame {
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGap(33)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-										.addComponent(txtCategoryID, Alignment.TRAILING)
-										.addComponent(txtCategory, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE))))))
+										.addComponent(txtClassroomID, Alignment.TRAILING)
+										.addComponent(txtClassroom, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE))))))
 					.addGap(39))
 		);
 		gl_contentPane.setVerticalGroup(
@@ -214,12 +209,12 @@ public class CategoryForm extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txtCategoryID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtClassroomID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblNewLabel))
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblNewLabel_1)
-						.addComponent(txtCategory, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(txtClassroom, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(17)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnClose)
@@ -230,16 +225,16 @@ public class CategoryForm extends JFrame {
 					.addGap(45))
 		);
 		
-		tblCategory = new JTable();
-		scrollPane.setViewportView(tblCategory);
-		this.tblCategory.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
-            if (!tblCategory.getSelectionModel().isSelectionEmpty()) {
+		tblClassroom = new JTable();
+		scrollPane.setViewportView(tblClassroom);
+		this.tblClassroom.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            if (!tblClassroom.getSelectionModel().isSelectionEmpty()) {
 
-                String id = tblCategory.getValueAt(tblCategory.getSelectedRow(), 0).toString();
+                String id = tblClassroom.getValueAt(tblClassroom.getSelectedRow(), 0).toString();
 
-                category = categoryService.findById(id);
-                txtCategoryID.setText(category.getId());
-                txtCategory.setText(category.getName());
+                classroom = ClassroomService.findById(id);
+                txtClassroomID.setText(classroom.getId());
+                txtClassroomID.setText(classroom.getName());
 
             }
         });
