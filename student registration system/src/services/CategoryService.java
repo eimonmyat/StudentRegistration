@@ -8,8 +8,6 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
-
 import config.DBConfig;
 import entities.Category;
 import repositories.CategoryRepo;
@@ -27,8 +25,9 @@ public class CategoryService implements CategoryRepo {
 	            ps.close();
 
 	        } catch (SQLException e) {	
-	            //if (e instanceof MySQLIntegrityConstraintViolationException) {
-	                JOptionPane.showMessageDialog(null, "Already Exists");
+	           // if (e instanceof MySQLIntegrityConstraintViolationException) {
+	        	e.printStackTrace();
+	        	//JOptionPane.showMessageDialog(null, "Already Exists");
 	            //}
 	        }
 	    }
@@ -144,7 +143,7 @@ public class CategoryService implements CategoryRepo {
 		 return prefix+"00000001";
 		 
 	 }
-	 /*public boolean isduplicate(String[]data)throws SQLException{
+	 public boolean isduplicate(String[]data)throws SQLException{
 		 String query="Select * from courseCategory where categoryName='"+data[0]+"'";
 		 Statement st=this.dbConfig.getConnection().createStatement();
 		 ResultSet rs;
@@ -160,6 +159,6 @@ public class CategoryService implements CategoryRepo {
 		 else {
 			 return false;
 		 }
-	 }*/
+	 }
 	 
 }

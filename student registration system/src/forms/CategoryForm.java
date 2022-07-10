@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -42,7 +41,6 @@ public class CategoryForm extends JFrame {
 	private List<Category> origianlCategoryList = new ArrayList<>();
 	private JTable tblCategory;
 	private JTextField txtCategoryID;
-	private Vector vid=new Vector();
 	
 	/**
 	 * Launch the application.
@@ -73,8 +71,7 @@ public class CategoryForm extends JFrame {
 
         this.origianlCategoryList = this.categoryService.findAllCategories();
         List<Category> categoryList = optionalCategories.orElseGet(() -> origianlCategoryList);
-        
-        
+
         categoryList.forEach(c -> {
             Object[] row = new Object[2];
             row[0] = c.getId();
@@ -112,24 +109,39 @@ public class CategoryForm extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel lblNewLabel = new JLabel("Category Id");
-		txtCategoryID = new JTextField();
-		txtCategoryID.setEditable(false);
-		txtCategoryID.setColumns(10);
 		
-		
+		txtCategory = new JTextField();
+		txtCategory.setColumns(10);
 		
 		JButton btnSave = new JButton("Save");
 		btnSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	String st[]=new String[1];
+
                 if (null != category && category.getId() != null) {
                     category.setName(txtCategory.getText());
                     if (!category.getName().isBlank()) {
+                    	st[0]=(String)txtCategory.getText();
+                    	try {
+                    		boolean ee=categoryService.isduplicate(st);
+                    		if(ee) {
+                    			JOptionPane.showMessageDialog(null, "Duplicate Record");
+                    			autoID();
+                    			resetFormData();
+                    			loadAllCategories(Optional.empty());
+                    			category=null;
+                    		}
+                    		else {
                     			categoryService.updateCategory(txtCategoryID.getText(), category);
                                 resetFormData();
                                 autoID();
                                 //JOptionPane.showMessageDialog(null, "Update successful");
                                 loadAllCategories(Optional.empty());
                                 category = null;
+                    		}
+                    	}catch(SQLException e1) {
+                    		e1.printStackTrace();
+                    	}
 						
                     } else {
                         JOptionPane.showMessageDialog(null, "Enter Required Field!");
@@ -138,12 +150,29 @@ public class CategoryForm extends JFrame {
                     Category category = new Category();
                     category.setName(txtCategory.getText());
 
+
                         if (null != category.getName() && !category.getName().isBlank()) {
+                        	st[0]=(String)txtCategory.getText();
+                        	try {
+                        		boolean ee=categoryService.isduplicate(st);
+                        		if(ee) {
+                        			JOptionPane.showMessageDialog(null, "Duplicate Record");
+                        			autoID();
+                        			resetFormData();
+                        			loadAllCategories(Optional.empty());
+                        			category=null;
+                        		}else
+                        		{
                         			categoryService.saveCategory(txtCategoryID.getText(),category);
                                     resetFormData();
                                     autoID();
-                                    
+                                    JOptionPane.showMessageDialog(null, "Save successful");
                                     loadAllCategories(Optional.empty());
+                        		}
+
+                        } catch(SQLException e2) {
+                        	e2.printStackTrace();
+                        }
                         }
                         	else {
                             JOptionPane.showMessageDialog(null, "Enter Required Field!");
@@ -153,11 +182,11 @@ public class CategoryForm extends JFrame {
         });
 		JScrollPane scrollPane = new JScrollPane();
 		
-		
+		txtCategoryID = new JTextField();
+		txtCategoryID.setEditable(false);
+		txtCategoryID.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Category Name");
-		txtCategory = new JTextField();
-		txtCategory.setColumns(10);
 		
 		JButton btnClose = new JButton("Close");
 		//btnClose.addActionListener(new ActionListener() {
