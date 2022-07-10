@@ -189,12 +189,11 @@ public class CategoryForm extends JFrame {
 		JLabel lblNewLabel_1 = new JLabel("Category Name");
 		
 		JButton btnClose = new JButton("Close");
-		//btnClose.addActionListener(new ActionListener() {
-		//	public void actionPerformed(ActionEvent e) {
-		//		if((JOptionPane.showConfirmDialog(this, "Are you sure you want to exit?","Confirm exiting",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE))==JOptionPane.YES_OPTION)
-		//			dispose();
-		//	}
-		//});
+		btnClose.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					dispose();
+			}
+		});
 		
 		JButton btnDelete = new JButton("Delete");
 	        btnDelete.addActionListener(new ActionListener() {
