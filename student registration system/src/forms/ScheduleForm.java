@@ -23,6 +23,8 @@ public class ScheduleForm extends JFrame {
 	private JTextField txtScheduleID;
 	private JTextField txtTotaluser;
 	private JTable tblSchedule;
+	private JTextField txtST;
+	private JTextField txtET;
 
 	/**
 	 * Launch the application.
@@ -94,6 +96,12 @@ public class ScheduleForm extends JFrame {
 		JButton btnClose = new JButton("Close");
 		
 		JScrollPane scrollPane = new JScrollPane();
+		
+		txtST = new JTextField();
+		txtST.setColumns(10);
+		
+		txtET = new JTextField();
+		txtET.setColumns(10);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -114,18 +122,19 @@ public class ScheduleForm extends JFrame {
 								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 526, GroupLayout.PREFERRED_SIZE)
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblNewLabel_4)
+										.addComponent(lblNewLabel)
+										.addComponent(lblNewLabel_1)
+										.addComponent(lblNewLabel_2)
 										.addComponent(lblNewLabel_3)
-										.addGroup(gl_contentPane.createSequentialGroup()
-											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(lblNewLabel)
-												.addComponent(lblNewLabel_1)
-												.addComponent(lblNewLabel_2))
-											.addGap(90)
-											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-												.addComponent(endDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(startDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(txtScheduleID))))
+										.addComponent(lblNewLabel_4))
+									.addGap(90)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(txtET, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(txtST, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+											.addComponent(endDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+											.addComponent(startDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+											.addComponent(txtScheduleID)))
 									.addGap(67)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addComponent(lblNewLabel_6)
@@ -167,9 +176,12 @@ public class ScheduleForm extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_3)
 						.addComponent(lblNewLabel_8)
-						.addComponent(cboLectureID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(cboLectureID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtST, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
-					.addComponent(lblNewLabel_4)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNewLabel_4)
+						.addComponent(txtET, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(32)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnSave)
