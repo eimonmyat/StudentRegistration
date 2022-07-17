@@ -19,23 +19,19 @@ import javax.swing.JSeparator;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.border.LineBorder;
 
 public class RegistrationForm {
 
 	private JFrame frame;
 	private JTextField txtStuID;
 	private JTextField txtStuName;
-	private JTextField txtNRC;
-	private JTextField txtAddress;
-	private JTextField txtPhone;
-	private JTextField txtEmail;
 	private JTextField txtRegID;
 	private JTextField txtRegDate;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTable tblRegister;
 	private JTextField txtTotal;
+	private JTextField txtCategoryName;
+	private JTextField txtFee;
+	private JTable tblSchedule;
 
 	/**
 	 * Launch the application.
@@ -65,7 +61,7 @@ public class RegistrationForm {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1081, 693);
+		frame.setBounds(100, 100, 981, 659);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel panel = new JPanel();
@@ -102,36 +98,12 @@ public class RegistrationForm {
 		
 		JLabel lblNewLabel_3 = new JLabel("Student Name");
 		
-		JLabel lblNewLabel_4 = new JLabel("NRC");
-		
-		JLabel lblNewLabel_5 = new JLabel("Address");
-		
-		JLabel lblNewLabel_6 = new JLabel("Date of Birth");
-		
-		JLabel lblNewLabel_7 = new JLabel("Phone No");
-		
-		JLabel lblNewLabel_8 = new JLabel("Email");
-		
 		txtStuID = new JTextField();
 		txtStuID.setEditable(false);
 		txtStuID.setColumns(10);
 		
 		txtStuName = new JTextField();
 		txtStuName.setColumns(10);
-		
-		txtNRC = new JTextField();
-		txtNRC.setColumns(10);
-		
-		txtAddress = new JTextField();
-		txtAddress.setColumns(10);
-		
-		txtPhone = new JTextField();
-		txtPhone.setColumns(10);
-		
-		JDateChooser doB = new JDateChooser();
-		
-		txtEmail = new JTextField();
-		txtEmail.setColumns(10);
 		
 		JLabel lblNewLabel_9 = new JLabel("Registration ID");
 		
@@ -145,12 +117,6 @@ public class RegistrationForm {
 		txtRegDate.setEditable(false);
 		txtRegDate.setColumns(10);
 		
-		JPanel panel_3 = new JPanel();
-		panel_3.setToolTipText("");
-		panel_3.setBackground(new Color(32, 178, 170));
-		
-		JScrollPane scrollPane = new JScrollPane();
-		
 		JLabel lblNewLabel_16 = new JLabel("Total Amount");
 		
 		txtTotal = new JTextField();
@@ -160,9 +126,12 @@ public class RegistrationForm {
 		JButton btnRegister = new JButton("Register");
 		
 		JButton btnCancel = new JButton("Cancel");
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
-			gl_panel_2.createParallelGroup(Alignment.LEADING)
+			gl_panel_2.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_2.createSequentialGroup()
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_2.createSequentialGroup()
@@ -174,47 +143,34 @@ public class RegistrationForm {
 								.addGroup(gl_panel_2.createSequentialGroup()
 									.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 										.addComponent(lblNewLabel_2)
-										.addComponent(lblNewLabel_3)
-										.addComponent(lblNewLabel_4)
-										.addComponent(lblNewLabel_5)
-										.addComponent(lblNewLabel_7)
-										.addComponent(lblNewLabel_6)
-										.addComponent(lblNewLabel_8))
+										.addComponent(lblNewLabel_3))
 									.addGap(78)
-									.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-										.addComponent(txtStuID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(txtStuName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(txtEmail, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(doB, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(txtPhone, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(txtAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(txtNRC, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+									.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING, false)
+										.addComponent(txtStuID)
+										.addComponent(txtStuName))
 									.addGap(156)
 									.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_panel_2.createSequentialGroup()
-											.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-												.addComponent(lblNewLabel_9)
-												.addComponent(lblNewLabel_10))
-											.addGap(98)
-											.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-												.addComponent(txtRegDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addComponent(txtRegID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-										.addComponent(panel_3, GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)))
-								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 861, GroupLayout.PREFERRED_SIZE))
-							.addGap(15)))
-					.addGap(230))
-				.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
-					.addContainerGap(607, Short.MAX_VALUE)
-					.addComponent(lblNewLabel_16)
-					.addGap(18)
-					.addComponent(txtTotal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(372))
-				.addGroup(gl_panel_2.createSequentialGroup()
-					.addGap(246)
-					.addComponent(btnRegister)
-					.addGap(76)
-					.addComponent(btnCancel)
-					.addContainerGap(687, Short.MAX_VALUE))
+										.addComponent(lblNewLabel_9)
+										.addComponent(lblNewLabel_10))
+									.addGap(98)
+									.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+										.addComponent(txtRegDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(txtRegID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 743, GroupLayout.PREFERRED_SIZE))))
+					.addGap(363))
+				.addGroup(Alignment.LEADING, gl_panel_2.createSequentialGroup()
+					.addGap(547)
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addGap(12)
+							.addComponent(btnRegister)
+							.addGap(30)
+							.addComponent(btnCancel))
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addComponent(lblNewLabel_16)
+							.addGap(32)
+							.addComponent(txtTotal, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(402, Short.MAX_VALUE))
 		);
 		gl_panel_2.setVerticalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
@@ -234,128 +190,77 @@ public class RegistrationForm {
 						.addComponent(lblNewLabel_10)
 						.addComponent(txtRegDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_2.createSequentialGroup()
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel_4)
-								.addComponent(txtNRC, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel_5)
-								.addComponent(txtAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblNewLabel_6)
-								.addComponent(doB, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel_7)
-								.addComponent(txtPhone, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel_8)
-								.addComponent(txtEmail, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 226, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
+					.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 338, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_16)
-						.addComponent(txtTotal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(txtTotal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_16))
+					.addGap(18)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnRegister)
-						.addComponent(btnCancel))
-					.addGap(16))
+						.addComponent(btnCancel)
+						.addComponent(btnRegister))
+					.addGap(45))
 		);
 		
-		tblRegister = new JTable();
-		scrollPane.setViewportView(tblRegister);
+		JLabel lblNewLabel_4 = new JLabel("Course Name");
 		
-		JLabel lblNewLabel_11 = new JLabel("Couse Info:");
-		lblNewLabel_11.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		JComboBox cboCourseName = new JComboBox();
 		
-		JLabel lblNewLabel_12 = new JLabel("Course Name");
+		JLabel lblNewLabel_5 = new JLabel("Category Name");
 		
-		JLabel lblNewLabel_13 = new JLabel("Category Name");
+		txtCategoryName = new JTextField();
+		txtCategoryName.setEditable(false);
+		txtCategoryName.setColumns(10);
 		
-		JLabel lblNewLabel_14 = new JLabel("Fee");
+		JLabel lblNewLabel_6 = new JLabel("Fee");
 		
-		JLabel lblNewLabel_15 = new JLabel("No of Students");
+		txtFee = new JTextField();
+		txtFee.setEditable(false);
+		txtFee.setColumns(10);
 		
-		JButton btnAdd = new JButton("Add");
-		
-		JButton btnDelete = new JButton("Delete");
-		
-		JComboBox comboBox = new JComboBox();
-		
-		textField = new JTextField();
-		textField.setColumns(10);
-		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		
-		JButton btnUpdate = new JButton("Update");
+		JScrollPane scrollPane = new JScrollPane();
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_3.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(lblNewLabel_4)
+					.addGap(71)
+					.addComponent(cboCourseName, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
+					.addGap(161)
 					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_3.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(lblNewLabel_11))
-						.addGroup(gl_panel_3.createSequentialGroup()
-							.addGap(46)
-							.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblNewLabel_12)
-								.addComponent(lblNewLabel_13)
-								.addComponent(lblNewLabel_14, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_15))
-							.addGap(61)
-							.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-								.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-								.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_panel_3.createSequentialGroup()
-							.addGap(103)
-							.addComponent(btnAdd, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
-							.addGap(32)
-							.addComponent(btnDelete)
-							.addGap(37)
-							.addComponent(btnUpdate)))
-					.addContainerGap(125, Short.MAX_VALUE))
+						.addComponent(lblNewLabel_5)
+						.addComponent(lblNewLabel_6))
+					.addPreferredGap(ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
+					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+						.addComponent(txtFee, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtCategoryName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(89))
+				.addGroup(gl_panel_3.createSequentialGroup()
+					.addGap(24)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 682, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(35, Short.MAX_VALUE))
 		);
 		gl_panel_3.setVerticalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_3.createSequentialGroup()
-					.addComponent(lblNewLabel_11)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGap(31)
 					.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_12)
-						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblNewLabel_4)
+						.addComponent(cboCourseName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_5)
+						.addComponent(txtCategoryName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_13)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_14)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_15)
-						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(26)
-					.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnAdd)
-						.addComponent(btnDelete)
-						.addComponent(btnUpdate))
-					.addGap(83))
+						.addComponent(lblNewLabel_6)
+						.addComponent(txtFee, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 186, GroupLayout.PREFERRED_SIZE)
+					.addGap(23))
 		);
+		
+		tblSchedule = new JTable();
+		scrollPane.setViewportView(tblSchedule);
 		panel_3.setLayout(gl_panel_3);
 		panel_2.setLayout(gl_panel_2);
 		

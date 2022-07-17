@@ -41,6 +41,7 @@ public class ClassroomForm extends JFrame {
 	private List<Classroom> origianlClassroomList = new ArrayList<>();
 	private JTable tblClassroom;
 	private JTextField txtClassroomID;
+	private JTextField txtClassSize;
 	
 	/**
 	 * Launch the application.
@@ -73,9 +74,10 @@ public class ClassroomForm extends JFrame {
         List<Classroom> ClassroomList = optionalCategories.orElseGet(() -> origianlClassroomList);
 
         ClassroomList.forEach(c -> {
-            Object[] row = new Object[2];
+            Object[] row = new Object[3];
             row[0] = c.getId();
             row[1] = c.getName();
+            row[2]=String.valueOf(c.getUsers()) ;
             dtm.addRow(row);
         });
     }
@@ -84,6 +86,7 @@ public class ClassroomForm extends JFrame {
     	//dtm.addColumn("No");
         dtm.addColumn("ID");
         dtm.addColumn("Classroom");
+        dtm.addColumn("Class Size");
         this.tblClassroom.setModel(dtm);
     }
 
@@ -97,6 +100,7 @@ public class ClassroomForm extends JFrame {
     }
 	private void resetFormData() {
         txtClassroom.setText("");
+        txtClassSize.setText("");
 	}
 	/**
 	 * Create the frame.
@@ -120,6 +124,7 @@ public class ClassroomForm extends JFrame {
 
                 if (null != classroom && classroom.getId() != null) {
                     classroom.setName(txtClassroom.getText());
+                    classroom.setUsers(Integer.parseInt(txtClassSize.getText()));
                     if (!classroom.getName().isBlank()) {
                     	st[0]=(String)txtClassroom.getText();
                     	try {
@@ -149,8 +154,8 @@ public class ClassroomForm extends JFrame {
                 } else {
                     Classroom classroom = new Classroom();
                     classroom.setName(txtClassroom.getText());
-
-
+                    classroom.setUsers(Integer.parseInt(txtClassSize.getText()));
+                    System.out.println(Integer.parseInt(txtClassSize.getText()));
                         if (null != classroom.getName() && !classroom.getName().isBlank()) {
                         	st[0]=(String)txtClassroom.getText();
                         	try {
@@ -210,31 +215,36 @@ public class ClassroomForm extends JFrame {
 	                }
 	            }
 	        });
+		
+		JLabel lblNewLabel_2 = new JLabel("Class size");
+		
+		txtClassSize = new JTextField();
+		txtClassSize.setColumns(10);
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGap(29)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 394, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblNewLabel_1)
-								.addComponent(lblNewLabel))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(lblNewLabel)
+								.addComponent(lblNewLabel_2))
+							.addGap(33)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(txtClassSize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(32)
-									.addComponent(btnSave)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(btnDelete)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(btnClose))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGap(33)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
 										.addComponent(txtClassroomID, Alignment.TRAILING)
-										.addComponent(txtClassroom, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE))))))
+										.addComponent(txtClassroom, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
+										.addGroup(gl_contentPane.createSequentialGroup()
+											.addComponent(btnSave)
+											.addPreferredGap(ComponentPlacement.UNRELATED)
+											.addComponent(btnDelete)))
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(btnClose)))))
 					.addGap(39))
 		);
 		gl_contentPane.setVerticalGroup(
@@ -248,12 +258,16 @@ public class ClassroomForm extends JFrame {
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblNewLabel_1)
 						.addComponent(txtClassroom, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(17)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnClose)
+						.addComponent(lblNewLabel_2)
+						.addComponent(txtClassSize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(26)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
 						.addComponent(btnDelete)
-						.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
-					.addGap(46)
+						.addComponent(btnClose))
+					.addGap(18)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
 					.addGap(45))
 		);
@@ -268,7 +282,7 @@ public class ClassroomForm extends JFrame {
                 classroom = classroomService.findById(id);
                 txtClassroomID.setText(classroom.getId());
                 txtClassroom.setText(classroom.getName());
-
+                txtClassSize.setText(String.valueOf(classroom.getUsers()));
             }
         });
 		contentPane.setLayout(gl_contentPane);

@@ -160,5 +160,25 @@ public class CategoryService implements CategoryRepo {
 			 return false;
 		 }
 	 }
+	public Category getData(String name) {
+		// TODO Auto-generated method stub
+		Category category=new Category();
+		
+        try (Statement st = this.dbConfig.getConnection().createStatement()) {
+
+
+            String query = "SELECT categoryID FROM courseCategory WHERE categoryName= '" + name + "';";
+            ResultSet rs = st.executeQuery(query);
+            ArrayList<String> result=new ArrayList<String>();
+			while(rs.next()) {
+				 result.add(rs.getString(name));
+			 }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return category;
+	}
 	 
 }

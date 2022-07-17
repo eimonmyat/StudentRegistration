@@ -15,4 +15,6 @@ public interface CategoryRepo {
 
     void deleteCategory(String id);
     String getAutoId(String field,String prefix);
+    //String[] getCategoryName();
+    Category getData(String name);
 }

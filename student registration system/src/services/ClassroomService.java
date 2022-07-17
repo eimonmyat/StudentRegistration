@@ -18,8 +18,9 @@ public class ClassroomService implements ClassroomRepo {
 	        try {
 
 	            PreparedStatement ps = this.dbConfig.getConnection()
-	                    .prepareStatement("INSERT INTO Classroom (classroomID,classroomName)  VALUES (?,?);");
+	                    .prepareStatement("INSERT INTO Classroom (classroomID,classroomName,totalUsers)  VALUES (?,?,?);");
 	            ps.setString(1,id );
+	            ps.setInt(3, Classroom.getUsers());
 	            ps.setString(2, Classroom.getName());
 	            ps.executeUpdate();
 	            ps.close();
@@ -35,10 +36,11 @@ public class ClassroomService implements ClassroomRepo {
 	        try {
 
 	            PreparedStatement ps = this.dbConfig.getConnection()
-	                    .prepareStatement("UPDATE Classroom SET classroomName = ? WHERE classroomID = ?");
+	                    .prepareStatement("UPDATE Classroom SET classroomName = ?, totalUsers=? WHERE classroomID = ?");
 
 	            ps.setString(1, Classroom.getName());
-	            ps.setString(2, id);
+	            ps.setInt(3, Classroom.getUsers());
+	            ps.setString(3, id);
 	            ps.executeUpdate();
 
 	            ps.close();
@@ -71,6 +73,7 @@ public class ClassroomService implements ClassroomRepo {
 	                Classroom c = new Classroom();
 	                c.setId(rs.getString("classroomID"));
 	                c.setName(rs.getString("classroomName"));
+	                c.setUsers(rs.getInt("totalUsers"));
 	                ClassroomList.add(c);
 	            }
 
@@ -92,6 +95,7 @@ public class ClassroomService implements ClassroomRepo {
 	            while (rs.next()) {
 	                Classroom.setId(rs.getString("classroomID"));
 	                Classroom.setName(rs.getString("classroomName"));
+	                Classroom.setUsers(rs.getInt("totalUsers"));
 	            }
 
 	        } catch (SQLException e) {
