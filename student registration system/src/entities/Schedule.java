@@ -5,17 +5,18 @@ import java.sql.Time;
 
 public class Schedule {
 	private String id;
-	private Date startDate;
-	private Time startTime;
-	private Date endDate;
-	private Time endTime;
+	private String startDate;
+	private String startTime;
+	private String endDate;
+	private String endTime;
 	private String totalUser;
-	//private Course course;
-	private Classroom classroom;
-	private Lecturer lecturer;
+	private String course;
+	private String classroom;
+	private String lecturer;
+	private int regUser;
 	
-	public Schedule(String id,Date startDate,Date endDate,Time startTime,Time endTime,
-			String totalUser,Classroom classroom,Lecturer lecturer) {
+	public Schedule(String id,String startTime,String endTime,String startDate,String endDate,
+			String totalUser,String course,String classroom,String lecturer) {
 		this.id=id;
 		this.startDate=startDate;
 		this.endDate=endDate;
@@ -36,51 +37,56 @@ public class Schedule {
 		this.id = id;
 	}
 
-	public Date getstartDate() {
+	public String getstartDate() {
 		return startDate;
 	}
-	public void setstartDate(Date startDate) {
+	public void setstartDate(String startDate) {
 		this.startDate = startDate;
 	}
 
-	public void setendDate(Date endDate) {
+	public void setendDate(String endDate) {
 		this.endDate = endDate;
 	}
-	public Date getendDate() {
+	public String getendDate() {
 		return endDate;
 	}
 
-	public void setstartTime(Time startTime) {
+	public void setstartTime(String startTime) {
 		this.startTime = startTime;
 	}
-	public Time getstartTime() {
+	public String getstartTime() {
 		return startTime;
 	}
 
-	public void setendTime(Time endTime) {
+	public void setendTime(String endTime) {
 		this.endTime = endTime;
 	}
-	public Time getendTime() {
+	public String getendTime() {
 		return endTime;
 	}
 
-	public void setTotalUser(String totalUser) {
-		this.totalUser = totalUser;
-	}
-	public String gettotalUser() {
-		return totalUser;
-	}
-
-	public void setClassroom(Classroom classroom) {
+	public void setClassroom(String classroom) {
 		this.classroom = classroom;
 	}
-	public Classroom getClassroom() {
+	public String getClassroom() {
 		return classroom;
 	}
-	public void setLecturer(Lecturer lecturer) {
+	public void setLecturer(String lecturer) {
 		this.lecturer=lecturer;
 	}
-	public Lecturer getLecturer() {
+	public String getLecturer() {
 		return lecturer;
+	}
+	public void setCourse(String course) {
+		this.course=course;
+	}
+	public String getCourse() {
+		return course;
+	}
+	public int getRegisterUser() {
+		return regUser;
+	}
+	public void setRegisterUser(int regUser) {
+		this.regUser=regUser;
 	}
 }
