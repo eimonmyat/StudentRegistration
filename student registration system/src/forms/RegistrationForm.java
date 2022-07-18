@@ -8,18 +8,44 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JPanel;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
 import javax.swing.SwingConstants;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
+
+import entities.Category;
+import entities.Course;
+import entities.Registration;
+import entities.Schedule;
+import entities.Student;
+import services.RegistrationServices;
+import services.ScheduleServices;
+import services.StudentService;
+import services.CourseService;
+import services.CategoryService;
+
 import javax.swing.JSeparator;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 public class RegistrationForm {
 
@@ -32,7 +58,22 @@ public class RegistrationForm {
 	private JTextField txtCategoryName;
 	private JTextField txtFee;
 	private JTable tblSchedule;
-
+	private Student student;
+	private Schedule schedule;
+	private Registration registration;
+	private CourseService courseService;
+	private StudentService studentService;
+	private ScheduleServices scheduleService;
+	private CategoryService categoryService;
+	private RegistrationServices registrationService;
+	private DefaultTableModel dtm=new DefaultTableModel();
+	private List<Schedule> origianlScheduleList = new ArrayList<>();
+	private List<Course> courseList = new ArrayList<>();
+	JComboBox cboCourseName = new JComboBox();
+	Date date=new Date();
+	SimpleDateFormat dcn=new SimpleDateFormat("dd-MM-yyyy");
+	Course course;
+	Category category;
 	/**
 	 * Launch the application.
 	 */
@@ -48,12 +89,96 @@ public class RegistrationForm {
 			}
 		});
 	}
+	
+	private void loadAllSchedule(Optional<List<Schedule>> optionalCategories) {
+        this.dtm.getDataVector().removeAllElements();
+        this.dtm.fireTableDataChanged();
+
+        this.origianlScheduleList = this.scheduleService.findAllSchedule();
+        List<Schedule> categoryList = optionalCategories.orElseGet(() -> origianlScheduleList);
+
+        categoryList.forEach(c -> {
+            Object[] row = new Object[9];
+            row[0] = c.getId();
+            String co=c.getCourse();
+            row[1]=scheduleService.findCourseName(co);
+            row[2]=c.getstartTime();
+            row[3]=c.getendTime();
+            row[4]=c.getstartDate();
+            row[5]=c.getendDate();
+            String le=c.getLecturer();
+            row[6]=scheduleService.findLecturerName(le);
+            String cla=c.getClassroom();
+            row[7]=scheduleService.findClassroomName(cla);
+            row[8]=c.getRegisterUser();
+            dtm.addRow(row);
+        });
+    }
+	public void setColumnWidth(int index,int width) {
+		DefaultTableColumnModel tcm=(DefaultTableColumnModel)tblSchedule.getColumnModel();
+		TableColumn tc=tcm.getColumn(index);
+		tc.setPreferredWidth(width);
+	}
+
+    private void setTableDesign() {
+    	//dtm.addColumn("No");
+    	 dtm.addColumn("ID");
+         dtm.addColumn("Course Name");
+         dtm.addColumn("Start Time");
+         dtm.addColumn("End Time");
+         dtm.addColumn("Start Date");
+         dtm.addColumn("End Date");
+         dtm.addColumn("Lecturer");
+         dtm.addColumn("Classroom");
+         dtm.addColumn("Total");
+         this.tblSchedule.setModel(dtm);
+         setColumnWidth(0,40);
+         setColumnWidth(1,45);
+         setColumnWidth(2,35);
+         setColumnWidth(3,35);
+         setColumnWidth(4,40);
+         setColumnWidth(5,40);
+         setColumnWidth(6,50);
+         setColumnWidth(7,40);
+         setColumnWidth(8,8);
+    }
+
+    private void autoID() {
+    	txtStuID.setText(String.valueOf((studentService.getAutoId("studentID","U-"))));
+    	txtRegID.setText(String.valueOf((registrationService.getAutoId("registrationID","E-","registration"))));
+    }
+    
+    private void initializeDependency() {
+        this.registrationService = new RegistrationServices();
+        this.categoryService=new CategoryService();
+        this.scheduleService=new ScheduleServices();
+        this.studentService=new StudentService();
+        this.courseService=new CourseService();
+        //this.ClassroomService.setProductRepo(new ProductService());
+    }
+	private void cboFill() {
+		cboCourseName.addItem("- Select -");
+        courseList = courseService.findAllCourses();
+        courseList.forEach(s -> this.cboCourseName.addItem(s.getName()));
+		
+	}
+	
+	private void resetFormData() {
+        txtStuName.setText("");
+        cboCourseName.setSelectedIndex(0);
+	}
 
 	/**
 	 * Create the application.
 	 */
 	public RegistrationForm() {
 		initialize();
+        initializeDependency();
+        autoID();
+        txtRegDate.setText(dcn.format(date));
+        this.setTableDesign();
+        cboFill();
+        this.loadAllSchedule(Optional.empty());
 	}
 
 	/**
@@ -124,8 +249,80 @@ public class RegistrationForm {
 		txtTotal.setColumns(10);
 		
 		JButton btnRegister = new JButton("Register");
+		btnRegister.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+                /*if (cboCourseName.getSelectedIndex()!=0) {
+                	String st=cboCourseName.getSelectedItem().toString();
+    				ArrayList<String> str= courseService.findCategoryID(st);
+    				System.out.println(str);
+    				
+                        Course course = new Course();
+                        course.setId(txtCourseID.getText());
+                        course.setName(txtCourseName.getText());
+                        course.setFee(Double.parseDouble(txtFee.getText()));
+                        course.setCategory(selectedCategory.get());
+                            
+                            String ch[]=new String[3];
+		                if (null != course && course.getCategory().getId() != null) {
+		                	
+	                        if (null != course.getName() && !course.getName().isBlank()) {
+	                        	ch[0]=(String)txtCourseName.getText();
+	                        	ch[1]=(String)txtFee.getText();
+                        		ch[2]=(String)cboCategoryName.getSelectedItem();
+	                        	try {
+	                        		boolean ee=courseService.isduplicate(ch);
+	                        		if(ee) {
+	                        			JOptionPane.showMessageDialog(null, "Duplicate Record");
+	                        			resetFormData();
+	                        			autoID();
+	                        			
+	                        			loadAllCourses(Optional.empty());
+	                        			course=null;
+	                        		}else
+	                        		{
+	                        		courseService.saveCourse(course);
+                            		JOptionPane.showMessageDialog(null, "Success");
+                            		resetFormData();
+                            		autoID();
+                            		
+                            		loadAllCourses(Optional.empty());
+	                        		}
+
+	                        } catch(SQLException e2) {
+	                        	e2.printStackTrace();
+	                        }
+	                        }
+	                        	else {
+	                            JOptionPane.showMessageDialog(null, "Enter Required Field!");
+	                        }
+	                }
+                }
+                else {
+                	JOptionPane.showMessageDialog(null, "Select Category!");
+                	//cboCategoryName.requestFocus();
+                }*/
+			}
+			});
 		
 		JButton btnCancel = new JButton("Cancel");
+		
+		cboCourseName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String st=cboCourseName.getSelectedItem().toString();
+				course=courseService.findById(courseService.findCourseID(st));
+				//System.out.println(course.getCategory().getId());
+				
+				//String str=course.getCategory().getId();
+                
+               // txtCategoryName.setText(courseService.getCategoryName(str));
+				
+				
+				//String name=courseService.getCategoryName(course.getCategory().getId());
+				//txtCategoryName.setText(courseService.getCategoryName(course.getCategory().getId()));
+				txtFee.setText(String.valueOf(course.getFee()));
+			}
+		});
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -204,7 +401,8 @@ public class RegistrationForm {
 		
 		JLabel lblNewLabel_4 = new JLabel("Course Name");
 		
-		JComboBox cboCourseName = new JComboBox();
+		
+		
 		
 		JLabel lblNewLabel_5 = new JLabel("Category Name");
 		
