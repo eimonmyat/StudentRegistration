@@ -17,6 +17,8 @@ public interface CourseRepo {
 
     void deleteCourse(String id);
     String getAutoId(String field,String prefix);
-    ArrayList<String> getCategoryName(String id);
+    String getCategoryName(String id);
     ArrayList<String> findCategoryID(String name);
+    String findCourseID(String name);
+    String getCategoryID(String name);
 }

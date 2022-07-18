@@ -17,4 +17,5 @@ public interface ScheduleRepo {
     void deleteSchedule(String id);
     String getAutoId(String field,String prefix);
     ArrayList<String> getName(String field,String Table);
+    List<Schedule> findAllScheduleByID(String id);
 }

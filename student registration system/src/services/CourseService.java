@@ -91,28 +91,30 @@ public class CourseService implements CourseRepo {
 	        return courseList;
 	    }
 	 public Course findById(String id) {
-	        Course Course = new Course();
-
+	        Course course = new Course();
+	        System.out.println(id);
 	        try (Statement st = this.dbConfig.getConnection().createStatement()) {
 
 
-	            String query = "SELECT * FROM Course WHERE courseID= '" + id + "';";
+	            String query = "SELECT * FROM course WHERE courseID= '" + id + "';";
 	            ResultSet rs = st.executeQuery(query);
 
 	            while (rs.next()) {
+	            	
 	            	Category category=new Category();
-	                Course.setId(rs.getString("courseID"));
-	                Course.setName(rs.getString("courseName"));
-	                Course.setFee(Double.parseDouble(rs.getString("fee")));
+	                course.setId(rs.getString("courseID"));
+	                course.setName(rs.getString("courseName"));
+	                course.setFee(Double.parseDouble(rs.getString("fee")));
 	                category.setId(rs.getString("categoryID"));
-	                Course.setCategory(category);
+	                course.setCategory(category);
+	                //System.out.println(rs.getString(course.getCategory().getId().toString()));
 	            }
 
 	        } catch (SQLException e) {
 	            e.printStackTrace();
 	        }
 
-	        return Course;
+	        return course;
 	    }
 	 public String getAutoId(String field,String prefix) {
 		 try (Statement st = this.dbConfig.getConnection().createStatement()) {
@@ -179,14 +181,15 @@ public class CourseService implements CourseRepo {
 		 }
 	 }
 
-	public ArrayList<String> getCategoryName(String id) {
+	public String getCategoryName(String id) {
 			try(Statement st = this.dbConfig.getConnection().createStatement()) {
 	            String query = "SELECT categoryName FROM courseCategory where categoryID='"+id+"'";
 	            ResultSet rs = st.executeQuery(query);
-	            ArrayList<String> result=new ArrayList<String>();
+	            String result=new String();
 				 
 				 while(rs.next()) {
-					 result.add(rs.getString("categoryName"));
+					 result=rs.getString("categoryName");
+					 //System.out.println(result);
 				 }
 				 return result;
 			 }catch(SQLException e) {
@@ -201,6 +204,36 @@ public class CourseService implements CourseRepo {
             ArrayList<String> result=new ArrayList<String>();
 			 while(rs.next()) {
 				 result.add(rs.getString("categoryID"));
+			 }
+			 return result;
+		 }catch(SQLException e) {
+			 e.printStackTrace();
+			 return null;
+		 }
+	}
+	
+	public String findCourseID(String name) {
+		try(Statement st = this.dbConfig.getConnection().createStatement()) {
+            String query = "SELECT courseID FROM course where courseName='"+name+"'";
+            ResultSet rs = st.executeQuery(query);
+            String result=new String();
+			 while(rs.next()) {
+				 result=rs.getString("courseID");
+			 }
+			 return result;
+		 }catch(SQLException e) {
+			 e.printStackTrace();
+			 return null;
+		 }
+	}
+	
+	public String getCategoryID(String name) {
+		try(Statement st = this.dbConfig.getConnection().createStatement()) {
+            String query = "SELECT categoryID FROM course where courseName='"+name+"'";
+            ResultSet rs = st.executeQuery(query);
+            String result=new String();
+			 while(rs.next()) {
+				 result=rs.getString("categoryID");
 			 }
 			 return result;
 		 }catch(SQLException e) {

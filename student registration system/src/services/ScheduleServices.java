@@ -12,7 +12,9 @@ import javax.swing.JOptionPane;
 import config.DBConfig;
 import entities.Lecturer;
 import entities.Schedule;
+import entities.Category;
 import entities.Classroom;
+import entities.Course;
 import repositories.LecturerRepo;
 import repositories.ScheduleRepo;
 import repositories.ClassroomRepo;
@@ -290,6 +292,36 @@ public class ScheduleServices implements ScheduleRepo{
 	        }
 		
 	 }
+	 public List<Schedule> findAllScheduleByID(String id) {
+		 	
+	        List<Schedule> scheduleList = new ArrayList<>();
+	        try (Statement st = this.dbConfig.getConnection().createStatement()) {
+
+	            String query = "SELECT * FROM schedule where courseID='"+id+"'";
+
+	            ResultSet rs = st.executeQuery(query);
+
+	            while (rs.next()) {
+	            	Schedule c = new Schedule();
+	                c.setId(rs.getString("scheduleID"));
+	                c.setstartTime(rs.getString("starttime"));
+	                c.setendTime(rs.getString("endtime"));
+	                c.setstartDate(rs.getString("startDate"));
+	                c.setendDate(rs.getString("endDate"));
+	                c.setRegisterUser(rs.getInt("registeredUser"));
+	                c.setCourse(rs.getString("courseID"));
+	                c.setClassroom(rs.getString("classroomID"));
+	                c.setLecturer(rs.getString("lecturerID"));
+	                scheduleList.add(c);
+	            }
+
+
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+
+	        return scheduleList;
+	    }
 		 
 	 }
 

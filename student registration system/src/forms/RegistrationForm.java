@@ -69,6 +69,7 @@ public class RegistrationForm {
 	private DefaultTableModel dtm=new DefaultTableModel();
 	private List<Schedule> origianlScheduleList = new ArrayList<>();
 	private List<Course> courseList = new ArrayList<>();
+	
 	JComboBox cboCourseName = new JComboBox();
 	Date date=new Date();
 	SimpleDateFormat dcn=new SimpleDateFormat("dd-MM-yyyy");
@@ -310,17 +311,12 @@ public class RegistrationForm {
 		cboCourseName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String st=cboCourseName.getSelectedItem().toString();
+				String result=courseService.getCategoryID(st);
+				txtCategoryName.setText(courseService.getCategoryName(result));
 				course=courseService.findById(courseService.findCourseID(st));
-				//System.out.println(course.getCategory().getId());
-				
-				//String str=course.getCategory().getId();
-                
-               // txtCategoryName.setText(courseService.getCategoryName(str));
-				
-				
-				//String name=courseService.getCategoryName(course.getCategory().getId());
-				//txtCategoryName.setText(courseService.getCategoryName(course.getCategory().getId()));
 				txtFee.setText(String.valueOf(course.getFee()));
+				List<Schedule> sIDlist=scheduleService.findAllScheduleByID(course.getId());
+				loadAllSchedule(Optional.of(sIDlist));
 			}
 		});
 		

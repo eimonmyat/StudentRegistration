@@ -83,7 +83,7 @@ public class CourseForm extends JFrame {
             row[0] = c.getId();
             row[1] = c.getName();
             row[2]=c.getFee();
-            row[3]=courseService.getCategoryName(c.getCategory().getId()).get(0);
+            row[3]=courseService.getCategoryName(c.getCategory().getId());
             dtm.addRow(row);
         });
     }
@@ -387,7 +387,7 @@ public class CourseForm extends JFrame {
                 String str=course.getCategory().getId();
                 //String result=courseService.getCategoryName(str).get(0);
                 //System.out.println(result);
-                cboCategoryName.setSelectedItem(courseService.getCategoryName(str).get(0));
+                cboCategoryName.setSelectedItem(courseService.getCategoryName(str));
             }
         });
 		contentPane.setLayout(gl_contentPane);
