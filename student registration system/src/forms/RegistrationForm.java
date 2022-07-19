@@ -46,6 +46,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.border.MatteBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.border.BevelBorder;
 
 public class RegistrationForm {
 
@@ -54,7 +57,6 @@ public class RegistrationForm {
 	private JTextField txtStuName;
 	private JTextField txtRegID;
 	private JTextField txtRegDate;
-	private JTextField txtTotal;
 	private JTextField txtCategoryName;
 	private JTextField txtFee;
 	private JTable tblSchedule;
@@ -72,9 +74,10 @@ public class RegistrationForm {
 	
 	JComboBox cboCourseName = new JComboBox();
 	Date date=new Date();
-	SimpleDateFormat dcn=new SimpleDateFormat("dd-MM-yyyy");
+	SimpleDateFormat dcn=new SimpleDateFormat("yyyy-MM-dd");
 	Course course;
 	Category category;
+	String id;
 	/**
 	 * Launch the application.
 	 */
@@ -243,88 +246,74 @@ public class RegistrationForm {
 		txtRegDate.setEditable(false);
 		txtRegDate.setColumns(10);
 		
-		JLabel lblNewLabel_16 = new JLabel("Total Amount");
-		
-		txtTotal = new JTextField();
-		txtTotal.setEditable(false);
-		txtTotal.setColumns(10);
-		
 		JButton btnRegister = new JButton("Register");
 		btnRegister.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {    
 				
-                /*if (cboCourseName.getSelectedIndex()!=0) {
-                	String st=cboCourseName.getSelectedItem().toString();
-    				ArrayList<String> str= courseService.findCategoryID(st);
-    				System.out.println(str);
-    				
-                        Course course = new Course();
-                        course.setId(txtCourseID.getText());
-                        course.setName(txtCourseName.getText());
-                        course.setFee(Double.parseDouble(txtFee.getText()));
-                        course.setCategory(selectedCategory.get());
-                            
-                            String ch[]=new String[3];
-		                if (null != course && course.getCategory().getId() != null) {
-		                	
-	                        if (null != course.getName() && !course.getName().isBlank()) {
-	                        	ch[0]=(String)txtCourseName.getText();
-	                        	ch[1]=(String)txtFee.getText();
-                        		ch[2]=(String)cboCategoryName.getSelectedItem();
-	                        	try {
-	                        		boolean ee=courseService.isduplicate(ch);
-	                        		if(ee) {
-	                        			JOptionPane.showMessageDialog(null, "Duplicate Record");
-	                        			resetFormData();
-	                        			autoID();
-	                        			
-	                        			loadAllCourses(Optional.empty());
-	                        			course=null;
-	                        		}else
-	                        		{
-	                        		courseService.saveCourse(course);
-                            		JOptionPane.showMessageDialog(null, "Success");
-                            		resetFormData();
-                            		autoID();
-                            		
-                            		loadAllCourses(Optional.empty());
-	                        		}
-
-	                        } catch(SQLException e2) {
-	                        	e2.printStackTrace();
-	                        }
-	                        }
-	                        	else {
-	                            JOptionPane.showMessageDialog(null, "Enter Required Field!");
-	                        }
-	                }
-                }
-                else {
-                	JOptionPane.showMessageDialog(null, "Select Category!");
-                	//cboCategoryName.requestFocus();
-                }*/
-			}
+				if(txtStuName.getText()!=null) {
+					Student s=new Student();
+					s.setId(txtStuID.getText());
+					s.setName(txtStuName.getText());
+					
+						studentService.saveStudent(txtStuID.getText(), s);
+						
+				}
+					else {
+                        JOptionPane.showMessageDialog(null, "Enter Student Name!");
+                      }
+						
+						Registration registration=new Registration();
+						registration.setId(txtRegID.getText());
+						registration.setDate(txtRegDate.getText());
+						registration.setSchedule(scheduleService.findById(id));
+						registration.setStudent(studentService.findById(txtStuID.getText()));
+				
+						if (null != registration && registration.getSchedule().getId() != null) {
+							Schedule schedule=new Schedule();
+							schedule.setId(id);
+							schedule.setRegisterUser(Integer.parseInt(scheduleService.getName("registeredUser","schedule").get(0)));
+							
+							
+	                    	registrationService.saveRegistration(id, registration);
+	                    	scheduleService.updateRegisteredUser(id, schedule);
+							JOptionPane.showMessageDialog(null, "Success");
+							resetFormData();
+							autoID();
+							txtRegDate.setText(dcn.format(date));
+							loadAllSchedule(Optional.empty());
+	                    	
+	                    }
+						else
+							JOptionPane.showMessageDialog(null, "Select Schedule!");
+					
+					}
+				
 			});
 		
 		JButton btnCancel = new JButton("Cancel");
 		
 		cboCourseName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String st=cboCourseName.getSelectedItem().toString();
-				String result=courseService.getCategoryID(st);
-				txtCategoryName.setText(courseService.getCategoryName(result));
-				course=courseService.findById(courseService.findCourseID(st));
-				txtFee.setText(String.valueOf(course.getFee()));
-				List<Schedule> sIDlist=scheduleService.findAllScheduleByID(course.getId());
-				loadAllSchedule(Optional.of(sIDlist));
+				if(cboCourseName.getSelectedIndex()!=0) {
+					String st=cboCourseName.getSelectedItem().toString();
+					String result=courseService.getCategoryID(st);
+					txtCategoryName.setText(courseService.getCategoryName(result));
+					course=courseService.findById(courseService.findCourseID(st));
+					txtFee.setText(String.valueOf(course.getFee()));
+					List<Schedule> sIDlist=scheduleService.findAllScheduleByID(course.getId());
+					loadAllSchedule(Optional.of(sIDlist));
+					//System.out.println(txtStuName.getText());
+				}
+				else
+					loadAllSchedule(Optional.empty());
 			}
 		});
 		
 		JPanel panel_3 = new JPanel();
-		panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_3.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
-			gl_panel_2.createParallelGroup(Alignment.TRAILING)
+			gl_panel_2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_2.createSequentialGroup()
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_2.createSequentialGroup()
@@ -349,21 +338,13 @@ public class RegistrationForm {
 									.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 										.addComponent(txtRegDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(txtRegID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-								.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 743, GroupLayout.PREFERRED_SIZE))))
-					.addGap(363))
-				.addGroup(Alignment.LEADING, gl_panel_2.createSequentialGroup()
-					.addGap(547)
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+								.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 743, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_panel_2.createSequentialGroup()
-							.addGap(12)
+							.addGap(559)
 							.addComponent(btnRegister)
-							.addGap(30)
-							.addComponent(btnCancel))
-						.addGroup(gl_panel_2.createSequentialGroup()
-							.addComponent(lblNewLabel_16)
-							.addGap(32)
-							.addComponent(txtTotal, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(402, Short.MAX_VALUE))
+							.addGap(29)
+							.addComponent(btnCancel)))
+					.addContainerGap(363, Short.MAX_VALUE))
 		);
 		gl_panel_2.setVerticalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
@@ -384,14 +365,10 @@ public class RegistrationForm {
 						.addComponent(txtRegDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 338, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
+					.addGap(41)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-						.addComponent(txtTotal, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_16))
-					.addGap(18)
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnCancel)
-						.addComponent(btnRegister))
+						.addComponent(btnRegister)
+						.addComponent(btnCancel))
 					.addGap(45))
 		);
 		
@@ -455,6 +432,15 @@ public class RegistrationForm {
 		
 		tblSchedule = new JTable();
 		scrollPane.setViewportView(tblSchedule);
+		
+		this.tblSchedule.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            if (!tblSchedule.getSelectionModel().isSelectionEmpty()) {
+
+                id = tblSchedule.getValueAt(tblSchedule.getSelectedRow(), 0).toString();
+                
+            }
+        });
+		
 		panel_3.setLayout(gl_panel_3);
 		panel_2.setLayout(gl_panel_2);
 		

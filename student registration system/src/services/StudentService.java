@@ -18,7 +18,7 @@ public class StudentService implements StudentRepo {
 	        try {
 
 	            PreparedStatement ps = this.dbConfig.getConnection()
-	                    .prepareStatement("INSERT INTO student (studentID,studentName)  VALUES (?,?,?);");
+	                    .prepareStatement("INSERT INTO student (studentID,studentName)  VALUES (?,?);");
 	            ps.setString(1,id );
 	            
 	            ps.setString(2, student.getName());
@@ -95,7 +95,7 @@ public class StudentService implements StudentRepo {
 	    }
 	 public String getAutoId(String field,String prefix) {
 		 try (Statement st = this.dbConfig.getConnection().createStatement()) {
-			 String query="SELECT "+field+" from classroom";
+			 String query="SELECT "+field+" from student";
 			 ResultSet rs=st.executeQuery(query);
 			 ArrayList<String> result=new ArrayList<String>();
 			 int current;

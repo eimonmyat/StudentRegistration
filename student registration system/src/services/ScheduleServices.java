@@ -70,6 +70,22 @@ public class ScheduleServices implements ScheduleRepo{
 	            e.printStackTrace();
 	        }
 	    }
+	 public void updateRegisteredUser(String id, Schedule schedule) {
+	        try {
+
+	            PreparedStatement ps = this.dbConfig.getConnection()
+	                    .prepareStatement("UPDATE schedule SET registeredUser=? WHERE scheduleID = ?");            
+	          
+	            ps.setInt(1, schedule.getRegisterUser()+1);
+	            ps.setString(2,id );
+	            ps.executeUpdate();
+	            JOptionPane.showMessageDialog(null,"sucess");
+	            ps.close();
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
 	 public void deleteSchedule(String id) {
 		 try {
 			 PreparedStatement ps=this.dbConfig.getConnection()
@@ -322,6 +338,7 @@ public class ScheduleServices implements ScheduleRepo{
 
 	        return scheduleList;
 	    }
+	
 		 
 	 }
 
