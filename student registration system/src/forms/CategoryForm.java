@@ -88,7 +88,7 @@ public class CategoryForm extends JFrame {
     }
 
     private void autoID() {
-    	txtCategoryID.setText(String.valueOf((categoryService.getAutoId("categoryID","C-"))));
+    	txtCategoryID.setText(String.valueOf((categoryService.getAutoId("categoryID","T-"))));
     }
     
     private void initializeDependency() {

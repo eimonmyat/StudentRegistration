@@ -177,4 +177,23 @@ public class RegistrationServices implements RegistrationRepo{
 		 }
 }
 
+
+	public boolean isDuplicateStu(String scheduleID, String stuID) throws SQLException {
+		String query="Select * from registration where scheduleID='"+scheduleID+"' and studentID='"+stuID+"'";
+		 Statement st=this.dbConfig.getConnection().createStatement();
+		 ResultSet rs;
+		 try {
+			 rs=st.executeQuery(query);
+		 }catch(SQLException e) {
+			 e.printStackTrace();
+		 }
+		 rs=st.executeQuery(query);
+		 if(rs.next()) {
+			 return true;
+		 }
+		 else {
+			 return false;
+		 }
+	}
+
 }

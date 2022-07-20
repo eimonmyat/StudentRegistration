@@ -28,6 +28,7 @@ import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
 
 import entities.Category;
+import entities.Classroom;
 import entities.Course;
 import entities.Registration;
 import entities.Schedule;
@@ -37,6 +38,7 @@ import services.ScheduleServices;
 import services.StudentService;
 import services.CourseService;
 import services.CategoryService;
+import services.ClassroomService;
 
 import javax.swing.JSeparator;
 import javax.swing.JComboBox;
@@ -67,6 +69,7 @@ public class RegistrationForm {
 	private StudentService studentService;
 	private ScheduleServices scheduleService;
 	private CategoryService categoryService;
+	private ClassroomService classroomService;
 	private RegistrationServices registrationService;
 	private DefaultTableModel dtm=new DefaultTableModel();
 	private List<Schedule> origianlScheduleList = new ArrayList<>();
@@ -98,7 +101,7 @@ public class RegistrationForm {
         this.dtm.getDataVector().removeAllElements();
         this.dtm.fireTableDataChanged();
 
-        this.origianlScheduleList = this.scheduleService.findAllSchedule();
+        this.origianlScheduleList = this.scheduleService.findAllScheduleByToday(dcn.format(date));
         List<Schedule> categoryList = optionalCategories.orElseGet(() -> origianlScheduleList);
 
         categoryList.forEach(c -> {
@@ -158,6 +161,7 @@ public class RegistrationForm {
         this.scheduleService=new ScheduleServices();
         this.studentService=new StudentService();
         this.courseService=new CourseService();
+        this.classroomService=new ClassroomService();
         //this.ClassroomService.setProductRepo(new ProductService());
     }
 	private void cboFill() {
@@ -191,6 +195,7 @@ public class RegistrationForm {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 981, 659);
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel panel = new JPanel();
@@ -206,8 +211,8 @@ public class RegistrationForm {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, 927, Short.MAX_VALUE))
-				.addComponent(panel, GroupLayout.DEFAULT_SIZE, 1065, Short.MAX_VALUE)
+					.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, 827, Short.MAX_VALUE))
+				.addComponent(panel, GroupLayout.DEFAULT_SIZE, 965, Short.MAX_VALUE)
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -215,8 +220,8 @@ public class RegistrationForm {
 					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
-						.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)))
+						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
+						.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 565, GroupLayout.PREFERRED_SIZE)))
 		);
 		
 		JLabel lblNewLabel_1 = new JLabel("Student Registration");
@@ -249,42 +254,63 @@ public class RegistrationForm {
 		JButton btnRegister = new JButton("Register");
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {    
+				Student s=new Student();
+				String stuId=txtStuID.getText();
+				String regId=txtRegID.getText();
+				s.setId(txtStuID.getText());
+				s.setName(txtStuName.getText());
 				
-				if(txtStuName.getText()!=null) {
-					Student s=new Student();
-					s.setId(txtStuID.getText());
-					s.setName(txtStuName.getText());
+				
+				if(!s.getName().isBlank()) {
+					studentService.saveStudent(stuId, s);
+					Registration registration=new Registration();
+					registration.setId(txtRegID.getText());
+					registration.setDate(txtRegDate.getText());
+					registration.setStudent(studentService.findById(stuId));
+					registration.setSchedule(scheduleService.findById(id));
 					
-						studentService.saveStudent(txtStuID.getText(), s);
+					 System.out.println(studentService.findById(stuId).getName());
+					
+					
+					if (null != registration && registration.getSchedule().getId() != null && registration.getStudent().getId()!=null) {
+						Schedule schedule=new Schedule();
+						schedule.setId(id);
+						schedule.setRegisterUser(Integer.parseInt(scheduleService.getRegisteredUser("registeredUser","schedule",id).get(0)));
+						
+						try {
+							boolean ee=registrationService.isDuplicateStu(id, txtStuID.getText());
+							if(ee) {
+								JOptionPane.showMessageDialog(null, "This student is already registered in this schedule!");
+							}
+							else {
+								
+								
+								registrationService.saveRegistration(regId, registration);
+								
+		                    	scheduleService.updateRegisteredUser(id, schedule);
+								JOptionPane.showMessageDialog(null, "Success");
+								resetFormData();
+								autoID();
+								txtRegDate.setText(dcn.format(date));
+								loadAllSchedule(Optional.empty());
+							}
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+                    	
+                    	
+                    }
+					else {
+						JOptionPane.showMessageDialog(null, "Select Schedule!");
+					}
+						
 						
 				}
 					else {
                         JOptionPane.showMessageDialog(null, "Enter Student Name!");
                       }
 						
-						Registration registration=new Registration();
-						registration.setId(txtRegID.getText());
-						registration.setDate(txtRegDate.getText());
-						registration.setSchedule(scheduleService.findById(id));
-						registration.setStudent(studentService.findById(txtStuID.getText()));
-				
-						if (null != registration && registration.getSchedule().getId() != null) {
-							Schedule schedule=new Schedule();
-							schedule.setId(id);
-							schedule.setRegisterUser(Integer.parseInt(scheduleService.getName("registeredUser","schedule").get(0)));
-							
-							
-	                    	registrationService.saveRegistration(id, registration);
-	                    	scheduleService.updateRegisteredUser(id, schedule);
-							JOptionPane.showMessageDialog(null, "Success");
-							resetFormData();
-							autoID();
-							txtRegDate.setText(dcn.format(date));
-							loadAllSchedule(Optional.empty());
-	                    	
-	                    }
-						else
-							JOptionPane.showMessageDialog(null, "Select Schedule!");
 					
 					}
 				
@@ -300,7 +326,7 @@ public class RegistrationForm {
 					txtCategoryName.setText(courseService.getCategoryName(result));
 					course=courseService.findById(courseService.findCourseID(st));
 					txtFee.setText(String.valueOf(course.getFee()));
-					List<Schedule> sIDlist=scheduleService.findAllScheduleByID(course.getId());
+					List<Schedule> sIDlist=scheduleService.findAllScheduleByID(course.getId(),dcn.format(date));
 					loadAllSchedule(Optional.of(sIDlist));
 					//System.out.println(txtStuName.getText());
 				}
@@ -338,13 +364,13 @@ public class RegistrationForm {
 									.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 										.addComponent(txtRegDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(txtRegID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-								.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 743, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(panel_3, GroupLayout.DEFAULT_SIZE, 743, Short.MAX_VALUE)))
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addGap(559)
 							.addComponent(btnRegister)
 							.addGap(29)
 							.addComponent(btnCancel)))
-					.addContainerGap(363, Short.MAX_VALUE))
+					.addGap(43))
 		);
 		gl_panel_2.setVerticalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
@@ -364,7 +390,7 @@ public class RegistrationForm {
 						.addComponent(lblNewLabel_10)
 						.addComponent(txtRegDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
-					.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 338, GroupLayout.PREFERRED_SIZE)
+					.addComponent(panel_3, GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
 					.addGap(41)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnRegister)
@@ -402,15 +428,15 @@ public class RegistrationForm {
 					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblNewLabel_5)
 						.addComponent(lblNewLabel_6))
-					.addPreferredGap(ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
-					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+					.addGap(80)
+					.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING, false)
 						.addComponent(txtFee, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(txtCategoryName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(89))
 				.addGroup(gl_panel_3.createSequentialGroup()
 					.addGap(24)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 682, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(35, Short.MAX_VALUE))
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 682, Short.MAX_VALUE)
+					.addGap(33))
 		);
 		gl_panel_3.setVerticalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
@@ -425,8 +451,8 @@ public class RegistrationForm {
 					.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_6)
 						.addComponent(txtFee, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 186, GroupLayout.PREFERRED_SIZE)
+					.addGap(17)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
 					.addGap(23))
 		);
 		
@@ -435,8 +461,16 @@ public class RegistrationForm {
 		
 		this.tblSchedule.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
             if (!tblSchedule.getSelectionModel().isSelectionEmpty()) {
-
                 id = tblSchedule.getValueAt(tblSchedule.getSelectedRow(), 0).toString();
+                int regUsers=Integer.parseInt(scheduleService.getRegisteredUser("registeredUser","schedule",id).get(0));
+				//Classroom r=new Classroom();
+                String roomId=scheduleService.getRoomID(id);
+				int totalUsers=Integer.parseInt(classroomService.getName("totalUsers","classroom",roomId).get(0));
+				System.out.println(regUsers+","+totalUsers);
+				if(regUsers>=totalUsers) {
+					JOptionPane.showMessageDialog(null, "This schedule is full!");
+					id=null;
+				}
                 
             }
         });
@@ -489,11 +523,11 @@ public class RegistrationForm {
 		lblNewLabel.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 32));
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
-			gl_panel.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
-					.addGap(244)
-					.addComponent(lblNewLabel)
-					.addContainerGap(310, Short.MAX_VALUE))
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(327)
+					.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGap(609))
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)

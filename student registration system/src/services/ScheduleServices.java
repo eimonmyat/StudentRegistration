@@ -70,22 +70,6 @@ public class ScheduleServices implements ScheduleRepo{
 	            e.printStackTrace();
 	        }
 	    }
-	 public void updateRegisteredUser(String id, Schedule schedule) {
-	        try {
-
-	            PreparedStatement ps = this.dbConfig.getConnection()
-	                    .prepareStatement("UPDATE schedule SET registeredUser=? WHERE scheduleID = ?");            
-	          
-	            ps.setInt(1, schedule.getRegisterUser()+1);
-	            ps.setString(2,id );
-	            ps.executeUpdate();
-	            JOptionPane.showMessageDialog(null,"sucess");
-	            ps.close();
-
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-	    }
 	 public void deleteSchedule(String id) {
 		 try {
 			 PreparedStatement ps=this.dbConfig.getConnection()
@@ -148,7 +132,7 @@ public class ScheduleServices implements ScheduleRepo{
 	            }
 
 	        } catch (SQLException e) {
-	            e.printStackTrace();
+	             e.printStackTrace();
 	        }
 
 	        return category;
@@ -227,9 +211,23 @@ public class ScheduleServices implements ScheduleRepo{
 	            return null;
 	        }
 		 }
-	 public String findClassroomID(String condition) {
+	 public ArrayList<String> getRegisteredUser(String field,String Table,String id){
 		 try(Statement st=this.dbConfig.getConnection().createStatement()){
-			 String query="Select classroomID from classroom where classroomName='"+condition+"'";
+			 String query = "SELECT "+ field +" FROM "+ Table+" where scheduleID='"+id+"'";
+	            ResultSet rs = st.executeQuery(query);
+                ArrayList<String> result=new ArrayList<String>();
+	            while (rs.next()) {
+	                result.add(rs.getString(field));
+	            }
+                return result;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return null;
+	        }
+		 }
+	 public String findClassroomID(String name) {
+		 try(Statement st=this.dbConfig.getConnection().createStatement()){
+			 String query="Select classroomID from classroom where classroomName='"+name+"'";
 			 ResultSet rs=st.executeQuery(query);
 			 rs.next();
 			 String result=rs.getString(1);
@@ -240,37 +238,9 @@ public class ScheduleServices implements ScheduleRepo{
 	        }
 		
 	 }
-	 public String findLecturerID(String condition) {
+	 public String findLecturerID(String name) {
 		 try(Statement st=this.dbConfig.getConnection().createStatement()){
-			 String query="Select lecturerID from lecturer where lecturerName='"+condition+"'";
-			 ResultSet rs=st.executeQuery(query);
-			 rs.next();
-			 String result=rs.getString(1);
-                return result;
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	            return null;
-	        }
-		
-	 }
-	 
-	 public String findCourseID(String condition) {
-		 try(Statement st=this.dbConfig.getConnection().createStatement()){
-			 String query="Select courseID from course where courseName='"+condition+"'";
-			 ResultSet rs=st.executeQuery(query);
-			 rs.next();
-			 String result=rs.getString(1);
-                return result;
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	            return null;
-	        }
-		
-	 }
-	 
-	 public String findCourseName(String condition) {
-		 try(Statement st=this.dbConfig.getConnection().createStatement()){
-			 String query="Select courseName from course where courseID='"+condition+"'";
+			 String query="Select lecturerID from lecturer where lecturerName='"+name+"'";
 			 ResultSet rs=st.executeQuery(query);
 			 rs.next();
 			 String result=rs.getString(1);
@@ -282,9 +252,9 @@ public class ScheduleServices implements ScheduleRepo{
 		
 	 }
 	 
-	 public String findClassroomName(String condition) {
+	 public String findCourseID(String name) {
 		 try(Statement st=this.dbConfig.getConnection().createStatement()){
-			 String query="Select classroomName from classroom where classroomID='"+condition+"'";
+			 String query="Select courseID from course where courseName='"+name+"'";
 			 ResultSet rs=st.executeQuery(query);
 			 rs.next();
 			 String result=rs.getString(1);
@@ -295,9 +265,10 @@ public class ScheduleServices implements ScheduleRepo{
 	        }
 		
 	 }
-	 public String findLecturerName(String condition) {
+	 
+	 public String findCourseName(String name) {
 		 try(Statement st=this.dbConfig.getConnection().createStatement()){
-			 String query="Select lecturerName from lecturer where lecturerID='"+condition+"'";
+			 String query="Select courseName from course where courseID='"+name+"'";
 			 ResultSet rs=st.executeQuery(query);
 			 rs.next();
 			 String result=rs.getString(1);
@@ -308,12 +279,39 @@ public class ScheduleServices implements ScheduleRepo{
 	        }
 		
 	 }
-	 public List<Schedule> findAllScheduleByID(String id) {
+	 
+	 public String findClassroomName(String name) {
+		 try(Statement st=this.dbConfig.getConnection().createStatement()){
+			 String query="Select classroomName from classroom where classroomID='"+name+"'";
+			 ResultSet rs=st.executeQuery(query);
+			 rs.next();
+			 String result=rs.getString(1);
+                return result;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return null;
+	        }
+		
+	 }
+	 public String findLecturerName(String name) {
+		 try(Statement st=this.dbConfig.getConnection().createStatement()){
+			 String query="Select lecturerName from lecturer where lecturerID='"+name+"'";
+			 ResultSet rs=st.executeQuery(query);
+			 rs.next();
+			 String result=rs.getString(1);
+                return result;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return null;
+	        }
+		
+	 }
+	 public List<Schedule> findAllScheduleByID(String id,String todayDate) {
 		 	
 	        List<Schedule> scheduleList = new ArrayList<>();
 	        try (Statement st = this.dbConfig.getConnection().createStatement()) {
 
-	            String query = "SELECT * FROM schedule where courseID='"+id+"'";
+	            String query = "SELECT * FROM schedule where courseID='"+id+"' AND startDate>'"+todayDate+"'";
 
 	            ResultSet rs = st.executeQuery(query);
 
@@ -338,8 +336,83 @@ public class ScheduleServices implements ScheduleRepo{
 
 	        return scheduleList;
 	    }
-	
-		 
+	 
+	 public boolean isduplicateroom(String[]data)throws SQLException{
+		 String query="Select * from schedule where classroomID='"+data[0]+"' and starttime='"+data[1]+"' and endtime='"+data[2]+"' and endDate>'"+data[3]+"' and endDate='"+data[3]+"'";
+		 Statement st=this.dbConfig.getConnection().createStatement();
+		 ResultSet rs;
+		 try {
+			 rs=st.executeQuery(query);
+		 }catch(SQLException e) {
+			 e.printStackTrace();
+		 }
+		 rs=st.executeQuery(query);
+		 if(rs.next()) {
+			 return true;
+		 }
+		 else {
+			 return false;
+		 }
+	 }
+	 
+	 
+	 public void updateRegisteredUser(String id, Schedule schedule) {
+	        try {
+
+	            PreparedStatement ps = this.dbConfig.getConnection()
+	                    .prepareStatement("UPDATE schedule SET registeredUser=? WHERE scheduleID = ?");            
+	          
+	            ps.setInt(1, schedule.getRegisterUser()+1);
+	            ps.setString(2,id );
+	            ps.executeUpdate();
+	            JOptionPane.showMessageDialog(null,"sucess");
+	            ps.close();
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+	 public List<Schedule> findAllScheduleByToday(String todayDate) {
+
+	        List<Schedule> scheduleList = new ArrayList<>();
+	        try (Statement st = this.dbConfig.getConnection().createStatement()) {
+
+	            String query = "SELECT * FROM schedule where startDate>'"+todayDate+"'";
+
+	            ResultSet rs = st.executeQuery(query);
+
+	            while (rs.next()) {
+	            	Schedule c = new Schedule();
+	                c.setId(rs.getString("scheduleID"));
+	                c.setstartTime(rs.getString("starttime"));
+	                c.setendTime(rs.getString("endtime"));
+	                c.setstartDate(rs.getString("startDate"));
+	                c.setendDate(rs.getString("endDate"));
+	                c.setRegisterUser(rs.getInt("registeredUser"));
+	                c.setCourse(rs.getString("courseID"));
+	                c.setClassroom(rs.getString("classroomID"));
+	                c.setLecturer(rs.getString("lecturerID"));
+	                scheduleList.add(c);
+	            }
+
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+
+	        return scheduleList;
+	    }
+	public String getRoomID(String id) {
+		try(Statement st=this.dbConfig.getConnection().createStatement()){
+			 String query="Select classroomID from schedule where scheduleID='"+id+"'";
+			 ResultSet rs=st.executeQuery(query);
+			 rs.next();
+			 String result=rs.getString(1);
+               return result;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return null;
+	        }
+	}
 	 }
 
 

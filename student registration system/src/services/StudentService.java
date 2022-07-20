@@ -78,8 +78,8 @@ public class StudentService implements StudentRepo {
 	        try (Statement st = this.dbConfig.getConnection().createStatement()) {
 
 
-	            String query = "SELECT * FROM student WHERE studentID= '" + id + "';";
-	            ResultSet rs = st.executeQuery(query);
+	            String query = "SELECT * FROM student WHERE studentID= '" + id + "'";
+	             ResultSet rs = st.executeQuery(query);
 
 	            while (rs.next()) {
 	            	student.setId(rs.getString("studentID"));

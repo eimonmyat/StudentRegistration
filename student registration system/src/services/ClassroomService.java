@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import config.DBConfig;
 import entities.Classroom;
+import entities.Schedule;
 import repositories.ClassroomRepo;
 public class ClassroomService implements ClassroomRepo {
 	
@@ -164,5 +165,19 @@ public class ClassroomService implements ClassroomRepo {
 			 return false;
 		 }
 	 }
+	public ArrayList<String> getName(String field, String Table, String id) {
+		try(Statement st=this.dbConfig.getConnection().createStatement()){
+			 String query = "SELECT "+ field +" FROM "+ Table+" where classroomID='"+id+"'";
+	            ResultSet rs = st.executeQuery(query);
+               ArrayList<String> result=new ArrayList<String>();
+	            while (rs.next()) {
+	                result.add(rs.getString(field));
+	            }
+               return result;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return null;
+	        }
+	}
 	 
 }

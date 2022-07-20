@@ -91,7 +91,7 @@ public class ClassroomForm extends JFrame {
     }
 
     private void autoID() {
-    	txtClassroomID.setText(String.valueOf((classroomService.getAutoId("classroomID","C-"))));
+    	txtClassroomID.setText(String.valueOf((classroomService.getAutoId("classroomID","R-"))));
     }
     
     private void initializeDependency() {

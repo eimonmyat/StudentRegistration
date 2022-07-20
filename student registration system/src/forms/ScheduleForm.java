@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -56,6 +57,9 @@ public class ScheduleForm extends JFrame {
 	SimpleDateFormat dcn = new SimpleDateFormat("yyyy-MM-dd");
 	JDateChooser startDate,endDate;
 	private List<Schedule> origianlCategoryList = new ArrayList<>();
+	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
+	LocalDateTime now = LocalDateTime.now();  
+	
 
 	/**
 	 * Launch the application.
@@ -253,6 +257,8 @@ public class ScheduleForm extends JFrame {
         cboEndTime.addItem(TimeString2);
         cboEndTime.addItem(TimeString3);
         cboEndTime.addItem(TimeString4);
+        
+        //System.out.println(dtf.format(now));  
 		
 		JButton btnCreate = new JButton("create");
 		btnCreate.addActionListener(new ActionListener() {
@@ -305,21 +311,57 @@ public class ScheduleForm extends JFrame {
 					endTime=cboEndTime.getSelectedItem().toString();
 				
 				}
-				
-				sDate = dcn.format(startDate.getDate() );
-				eDate=dcn.format(endDate.getDate());				
 				schedule.setClassroom(c);
 				schedule.setCourse(co);
-				schedule.setLecturer(l);
-				schedule.setstartDate(sDate);
-				schedule.setendDate(eDate);
+				schedule.setLecturer(l);								
 				schedule.setstartTime(startTime);
 				schedule.setendTime(endTime);
 				schedule.setRegisterUser(Integer.parseInt("0"));
 				
+				sDate = dcn.format(startDate.getDate() );
+				eDate=dcn.format(endDate.getDate());
+				if(sDate.compareTo(dtf.format(now))>0) {
+					schedule.setstartDate(sDate);
+					if(eDate.compareTo(dtf.format(now))>0) {
+						schedule.setendDate(eDate);
+						 String check[]=new String[5];
+						
+							System.out.println("hello");
+							check[0]=c.toString();
+                     		check[1]=startTime;
+                     		check[2]=endTime;
+                     		check[3]=sDate;
+                     		check[4]=eDate;
+                     		try {
+                    			boolean ee=scheduleServices.isduplicateroom(check);
+                    			System.out.println(ee);
+                    			if(ee) {
+                    				JOptionPane.showMessageDialog(null, "Duplicate Room");
+                    				resetFormData();
+                    				autoID();                   				
+                    				loadAllCategories(Optional.empty());
+                    				schedule=null;
+                    			}
+                    			else {						 
+						scheduleServices.saveSchedule(txtScheduleID.getText(), schedule);
+						JOptionPane.showMessageDialog(null, "Save successful");
+                    			}
+					  }
+						 catch(SQLException e1) {
+                 			e1.printStackTrace();
+                 		}
+						 
+					}
+					else {
+						JOptionPane.showMessageDialog(null,"End Date is Late than today Date");
+					}
+				}
+				else {
+					JOptionPane.showMessageDialog(null,"Start Date is Late than today Date");
+					
+				}
 				
-				scheduleServices.saveSchedule(txtScheduleID.getText(), schedule);
-				
+								
 				resetFormData();
 				autoID();
 				loadAllCategories(Optional.empty());

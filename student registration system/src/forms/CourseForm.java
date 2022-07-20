@@ -98,7 +98,7 @@ public class CourseForm extends JFrame {
     }
 
     private void autoID() {
-    	txtCourseID.setText(String.valueOf((courseService.getAutoId("courseID","U-"))));
+    	txtCourseID.setText(String.valueOf((courseService.getAutoId("courseID","C-"))));
     }
     
     private void initializeDependency() {

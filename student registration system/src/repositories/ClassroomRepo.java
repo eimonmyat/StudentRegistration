@@ -1,5 +1,6 @@
 package repositories;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import entities.Classroom;
@@ -15,4 +16,5 @@ public interface ClassroomRepo {
 
     void deleteClassroom(String id);
     String getAutoId(String field,String prefix);
+    ArrayList<String> getName(String field, String Table, String id);
 }
