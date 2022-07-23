@@ -195,5 +195,33 @@ public class RegistrationServices implements RegistrationRepo{
 			 return false;
 		 }
 	}
+	
+	 public String findName(String id,String field,String table) {
+		 try(Statement st=this.dbConfig.getConnection().createStatement()){
+			 String query="Select "+field+" from "+table+" where scheduleID='"+id+"'";
+			 ResultSet rs=st.executeQuery(query);
+			 rs.next();
+			 String result=rs.getString(1);
+                return result;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return null;
+	        }
+		
+	 }
+	 
+	 public String findStudentName(String id) {
+		 try(Statement st=this.dbConfig.getConnection().createStatement()){
+			 String query="Select studentName from student where studentID='"+id+"'";
+			 ResultSet rs=st.executeQuery(query);
+			 rs.next();
+			 String result=rs.getString(1);
+                return result;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return null;
+	        }
+		
+	 }
 
 }

@@ -189,6 +189,7 @@ public class CourseService implements CourseRepo {
 				 
 				 while(rs.next()) {
 					 result=rs.getString("categoryName");
+					 
 					 //System.out.println(result);
 				 }
 				 return result;
@@ -204,6 +205,7 @@ public class CourseService implements CourseRepo {
             ArrayList<String> result=new ArrayList<String>();
 			 while(rs.next()) {
 				 result.add(rs.getString("categoryID"));
+				
 			 }
 			 return result;
 		 }catch(SQLException e) {
