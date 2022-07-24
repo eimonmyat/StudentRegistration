@@ -42,6 +42,7 @@ public class CoursePanel extends JPanel {
 	private List<Course> origianlCourseList = new ArrayList<>();
 	private List<Category> categoryList = new ArrayList<>();
 	JComboBox cboCategoryName = new JComboBox();
+	private JTextField txtDuration;
 	/**
 	 * Launch the application.
 	 */
@@ -152,6 +153,7 @@ public class CoursePanel extends JPanel {
                         course.setId(txtCourseID.getText());
                         course.setName(txtCourseName.getText());
                         course.setFee(Double.parseDouble(txtFee.getText()));
+                        course.setDuration(Integer.parseInt(txtDuration.getText()));
                         course.setCategory(selectedCategory.get());
                             
                             String ch[]=new String[3];
@@ -172,12 +174,17 @@ public class CoursePanel extends JPanel {
 	                        			course=null;
 	                        		}else
 	                        		{
-	                        		courseService.saveCourse(course);
-                            		JOptionPane.showMessageDialog(null, "Success");
-                            		resetFormData();
-                            		autoID();
-                            		
-                            		loadAllCourses(Optional.empty());
+	                        			if(Integer.parseInt(txtDuration.getText())<0) {
+	                        				JOptionPane.showMessageDialog(null, "Please enter positive duration");
+	                        			}else {
+	                        				courseService.saveCourse(course);
+	                                		JOptionPane.showMessageDialog(null, "Success");
+	                                		resetFormData();
+	                                		autoID();
+	                                		
+	                                		loadAllCourses(Optional.empty());
+	                        			}
+	                        		
 	                        		}
 
 	                        } catch(SQLException e2) {
@@ -211,6 +218,7 @@ public class CoursePanel extends JPanel {
                         course.setId(txtCourseID.getText());
                         course.setName(txtCourseName.getText());
                         course.setFee(Double.parseDouble(txtFee.getText()));
+                        course.setDuration(Integer.parseInt(txtDuration.getText()));
                         course.setCategory(selectedCategory.get());
                                               
                         String check[]=new String[3];
@@ -231,13 +239,18 @@ public class CoursePanel extends JPanel {
                         				course=null;
                         			}
                         			else {
-                        				courseService.updateCourse(course);
-                        				JOptionPane.showMessageDialog(null, "Update successful");
-                        				resetFormData();
-                        				autoID();
+                        				if(Integer.parseInt(txtDuration.getText())<0) {
+	                        				JOptionPane.showMessageDialog(null, "Please enter positive duration");
+	                        			}else {
+	                        				courseService.updateCourse(course);
+	                        				JOptionPane.showMessageDialog(null, "Update successful");
+	                        				resetFormData();
+	                        				autoID();
+	                        				
+	                        				loadAllCourses(Optional.empty());
+	                        				course = null;
+	                        			}
                         				
-                        				loadAllCourses(Optional.empty());
-                        				course = null;
                         			}
                         		}catch(SQLException e1) {
                         			e1.printStackTrace();
@@ -282,36 +295,44 @@ public class CoursePanel extends JPanel {
 		});
 		
 		JScrollPane scrollPane = new JScrollPane();
+		
+		JLabel lblNewLabel_4 = new JLabel("Duration");
+		
+		txtDuration = new JTextField();
+		txtDuration.setColumns(10);
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(78)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(18)
+							.addGap(78)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 465, GroupLayout.PREFERRED_SIZE)
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(lblNewLabel_3, Alignment.LEADING)
+										.addComponent(lblNewLabel_2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(lblNewLabel_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+										.addComponent(lblNewLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(lblNewLabel_4, Alignment.LEADING))
+									.addGap(87)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(txtDuration, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(cboCategoryName, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
+										.addComponent(txtCourseName, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
+										.addComponent(txtCourseID, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
+										.addComponent(txtFee, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)))))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(97)
 							.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
 							.addComponent(btnUpdate, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
 							.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
-							.addGap(24))
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 465, GroupLayout.PREFERRED_SIZE)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(lblNewLabel_3, Alignment.LEADING)
-								.addComponent(lblNewLabel_2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(lblNewLabel_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-								.addComponent(lblNewLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-							.addGap(87)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(cboCategoryName, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE)
-								.addComponent(txtCourseName, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
-								.addComponent(txtCourseID, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
-								.addComponent(txtFee, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE))))
-					.addGap(78))
+							.addGap(18)
+							.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(78, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -332,15 +353,19 @@ public class CoursePanel extends JPanel {
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel)
 						.addComponent(cboCategoryName, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-					.addGap(40)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGap(32)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNewLabel_4)
+						.addComponent(txtDuration, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnSave)
-						.addComponent(btnCancel)
+						.addComponent(btnUpdate)
 						.addComponent(btnDelete)
-						.addComponent(btnUpdate))
-					.addGap(29)
+						.addComponent(btnCancel))
+					.addGap(18)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(58, Short.MAX_VALUE))
+					.addGap(26))
 		);
 		
 		tblCourse = new JTable();

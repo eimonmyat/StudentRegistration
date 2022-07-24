@@ -4,14 +4,15 @@ public class Course {
 	private String id;
 	private String name;
 	private double fee;
+	private int duration;
 	private Category category;
-	private int stuNo;
-	public Course(String id,String name,double fee,Category category,int stuNo) {
+	//private int stuNo;
+	public Course(String id,String name,double fee,Category category,int duration) {
 		this.id=id;
 		this.name=name;
 		this.fee=fee;
 		this.category=category;
-		this.stuNo=stuNo;
+		this.duration=duration;
 	}
 	public Course() {
 		
@@ -47,11 +48,11 @@ public class Course {
 		this.category=category;
 	}
 	
-	public int getstuNo() {
-		return stuNo;
+	public int getDuration() {
+		return duration;
 	}
-	public void setstuNo(int stuNo) {
-		this.stuNo=stuNo;
+	public void setDuration(int duration) {
+		this.duration=duration;
 	}
 	
 }

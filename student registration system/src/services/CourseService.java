@@ -20,11 +20,12 @@ public class CourseService implements CourseRepo {
 	        try {
 
 	            PreparedStatement ps = this.dbConfig.getConnection()
-	                    .prepareStatement("INSERT INTO Course (courseID,courseName,fee,categoryID)  VALUES (?,?,?,?);");
+	                    .prepareStatement("INSERT INTO Course (courseID,courseName,fee,duration,categoryID)  VALUES (?,?,?,?,?);");
 	            ps.setString(1,course.getId());
 	            ps.setString(2, course.getName());
 	            ps.setDouble(3, course.getFee());
-	            ps.setString(4, course.getCategory().getId());
+	            ps.setInt(4,course.getDuration());
+	            ps.setString(5, course.getCategory().getId());
 	            ps.executeUpdate();
 	            ps.close();
 
@@ -39,12 +40,13 @@ public class CourseService implements CourseRepo {
 	        try {
 
 	            PreparedStatement ps = this.dbConfig.getConnection()
-	                    .prepareStatement("UPDATE Course SET courseName = ?, fee=?, categoryID=?,  WHERE courseID = ?");
+	                    .prepareStatement("UPDATE Course SET courseName = ?, fee=?, duration=?, categoryID=?,  WHERE courseID = ?");
 
 	            ps.setString(1, course.getName());
 	            ps.setString(3, course.getCategory().getId());
 	            ps.setDouble(2, course.getFee());
-	            ps.setString(4, course.getId());
+	            ps.setInt(4,course.getDuration());
+	            ps.setString(5, course.getId());
 	            ps.executeUpdate();
 
 	            ps.close();
@@ -79,6 +81,7 @@ public class CourseService implements CourseRepo {
 	                c.setId(rs.getString("courseID"));
 	                c.setName(rs.getString("courseName"));
 	                c.setFee(Double.parseDouble(rs.getString("fee")));
+	                c.setDuration(rs.getInt("duration"));
 	                category.setId(rs.getString("categoryID"));
 	                c.setCategory(category);
 	                courseList.add(c);
@@ -105,6 +108,7 @@ public class CourseService implements CourseRepo {
 	                course.setId(rs.getString("courseID"));
 	                course.setName(rs.getString("courseName"));
 	                course.setFee(Double.parseDouble(rs.getString("fee")));
+	                course.setDuration(rs.getInt("duration"));
 	                category.setId(rs.getString("categoryID"));
 	                course.setCategory(category);
 	                //System.out.println(rs.getString(course.getCategory().getId().toString()));

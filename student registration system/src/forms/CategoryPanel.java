@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
 import entities.Category;
@@ -226,6 +227,16 @@ public class CategoryPanel extends JPanel {
 		);
 		
 		tblCategory = new JTable();
+		this.tblCategory.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            if (!tblCategory.getSelectionModel().isSelectionEmpty()) {
+
+                String id = tblCategory.getValueAt(tblCategory.getSelectedRow(), 0).toString();
+
+                category = categoryService.findById(id);
+                txtCategoryID.setText(category.getId());
+                txtCategory.setText(category.getName());
+            }
+        });
 		scrollPane.setViewportView(tblCategory);
 		setLayout(groupLayout);
 

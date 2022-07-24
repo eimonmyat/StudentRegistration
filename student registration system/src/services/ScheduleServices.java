@@ -460,8 +460,16 @@ public class ScheduleServices implements ScheduleRepo{
 	 }
 	@Override
 	public String getRoomID(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		try(Statement st=this.dbConfig.getConnection().createStatement()){
+			 String query="Select classroomID from schedule where scheduleID='"+id+"'";
+			 ResultSet rs=st.executeQuery(query);
+			 rs.next();
+			 String result=rs.getString(1);
+               return result;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return null;
+	        }
 	}
 	public ArrayList<String> getField(String field,String Table,String id){
 		 try(Statement st=this.dbConfig.getConnection().createStatement()){

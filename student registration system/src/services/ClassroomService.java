@@ -179,5 +179,17 @@ public class ClassroomService implements ClassroomRepo {
 	            return null;
 	        }
 	}
+	public int getTotalUsers(String id) {
+		try(Statement st=this.dbConfig.getConnection().createStatement()){
+			 String query = "SELECT totalUsers FROM classroom where classroomID='"+id+"'";
+	            ResultSet rs = st.executeQuery(query);
+	            int result=rs.getInt("totalUsers");
+	            
+               return result;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return 0;
+	        }
+	}
 	 
 }

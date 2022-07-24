@@ -269,23 +269,7 @@ public class stuNewReg extends JPanel {
 					.addContainerGap(20, Short.MAX_VALUE))
 		);
 		
-		tblSchedule = new JTable();
-		scrollPane.setViewportView(tblSchedule);
-		this.tblSchedule.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
-            if (!tblSchedule.getSelectionModel().isSelectionEmpty()) {
-                id = tblSchedule.getValueAt(tblSchedule.getSelectedRow(), 0).toString();
-                int regUsers=Integer.parseInt(scheduleService.getField("registeredUser","schedule",id).get(0));
-				//Classroom r=new Classroom();
-                String roomId=scheduleService.getRoomID(id);
-				int totalUsers=Integer.parseInt(classroomService.getName("totalUsers","classroom",roomId).get(0));
-				System.out.println(regUsers+","+totalUsers);
-				if(regUsers>=totalUsers) {
-					JOptionPane.showMessageDialog(null, "This schedule is full!");
-					id=null;
-				}
-                
-            }
-        });
+		
 		panel_3.setLayout(gl_panel_3);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("Student Name");
@@ -467,6 +451,26 @@ public class stuNewReg extends JPanel {
 					.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 583, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(141, Short.MAX_VALUE))
 		);
+		tblSchedule = new JTable();
+		scrollPane.setViewportView(tblSchedule);
+		this.tblSchedule.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            if (!tblSchedule.getSelectionModel().isSelectionEmpty()) {
+                id = tblSchedule.getValueAt(tblSchedule.getSelectedRow(), 0).toString();
+                
+                int regUsers=Integer.parseInt(scheduleService.getField("registeredUser","schedule",id).get(0));
+                
+				//Classroom r=new Classroom();
+                String roomId=scheduleService.getRoomID(id);
+                System.out.println(roomId);
+                int totalUsers=Integer.parseInt(classroomService.getName("totalUsers","classroom",roomId).get(0));
+				System.out.println(regUsers+","+totalUsers);
+				if(regUsers>=totalUsers) {
+					JOptionPane.showMessageDialog(null, "This schedule is full!");
+					id=null;
+				}
+                
+            }
+        });
 		setLayout(groupLayout);
 
 	}

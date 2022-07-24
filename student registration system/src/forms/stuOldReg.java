@@ -344,7 +344,7 @@ public class stuOldReg extends JPanel {
                 int regUsers=Integer.parseInt(scheduleService.getField("registeredUser","schedule",id).get(0));
 				//Classroom r=new Classroom();
                 String roomId=scheduleService.getRoomID(id);
-				int totalUsers=Integer.parseInt(classroomService.getName("totalUsers","classroom",roomId).get(0));
+                int totalUsers=Integer.parseInt(classroomService.getName("totalUsers","classroom",roomId).get(0));
 				System.out.println(regUsers+","+totalUsers);
 				if(regUsers>=totalUsers) {
 					JOptionPane.showMessageDialog(null, "This schedule is full!");

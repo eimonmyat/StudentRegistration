@@ -36,7 +36,9 @@ import javax.swing.table.TableColumn;
 
 import com.toedter.calendar.JDateChooser;
 
+import entities.Course;
 import entities.Schedule;
+import services.CourseService;
 import services.ScheduleServices;
 
 public class SchedulePanel extends JPanel {
@@ -51,6 +53,7 @@ public class SchedulePanel extends JPanel {
 	private DefaultTableModel dtm=new DefaultTableModel();
 	private String co,startTime,endTime,sDate,eDate;
 	private ScheduleServices scheduleServices;
+	private CourseService courseService;
 	private Schedule schedule;
 	SimpleDateFormat dcn = new SimpleDateFormat("yyyy-MM-dd");
 	DateFormat dateFormat=DateFormat.getDateInstance();
@@ -112,6 +115,7 @@ public class SchedulePanel extends JPanel {
 	}
 	public void initializedepency() {
 		this.scheduleServices=new ScheduleServices();
+		this.courseService=new CourseService();
 	}
 	public void fillLecturer() {	
 		   ArrayList<String> str=(ArrayList<String>)scheduleServices.getName("lecturerName","lecturer");
@@ -210,14 +214,14 @@ public class SchedulePanel extends JPanel {
 		    		LocalDate localdate=Instant.ofEpochMilli(start.getTime())
 		    			      .atZone(ZoneId.systemDefault())
 		    			      .toLocalDate();
-		    		
-		    		LocalDate result=scheduleServices.add(localdate, 8);
+		    		//System.out.println(courseService.findById(scheduleServices.findCourseID(cboCourse.getSelectedItem().toString())));
+		    		Course c=courseService.findById(scheduleServices.findCourseID(cboCourse.getSelectedItem().toString()));
+		    		int duration=c.getDuration();
+		    		LocalDate result=scheduleServices.add(localdate, duration);
 		    		
 		    		java.util.Date d=Date.from(result.atStartOfDay(ZoneId.systemDefault()).toInstant());
 		    		endDate.setDate(d);
 		    		//endDate.setDate(dateFormat.format(d));
-		    		
-		    		//System.out.println(dateFormat.format(d));
 				}
 				
 			}
@@ -454,53 +458,48 @@ public class SchedulePanel extends JPanel {
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(93)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
-							.addComponent(txtScheduleID, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(lblNewLabel_3, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
-									.addComponent(cboStartTime, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
-									.addComponent(endDate, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayout.createSequentialGroup()
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblNewLabel_4, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE))
-									.addPreferredGap(ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
-									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-										.addComponent(cboEndTime, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
-										.addComponent(startDate, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))))
-							.addGap(2)))
-					.addPreferredGap(ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblNewLabel_8, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_7, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_6, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE))
-							.addGap(97)
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(cboClassroomID, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)
-								.addComponent(cboLectureID, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)
-								.addComponent(cboCourse, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(btnCreate, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-							.addGap(42)
-							.addComponent(btnUpdate, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(btnClose, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)))
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_8, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_6, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_7, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(cboClassroomID, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)
+						.addGroup(Alignment.TRAILING, groupLayout.createParallelGroup(Alignment.LEADING)
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(txtScheduleID, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+									.addComponent(cboCourse, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(14)
+										.addComponent(btnCreate, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+										.addGap(44)
+										.addComponent(btnUpdate, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addPreferredGap(ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+											.addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
+											.addComponent(lblNewLabel_1, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+											.addComponent(lblNewLabel_4, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+											.addComponent(lblNewLabel_3, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE))
+										.addPreferredGap(ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+											.addComponent(cboStartTime, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+											.addComponent(cboEndTime, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+											.addComponent(startDate, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+											.addComponent(endDate, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE))
+										.addGap(2))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addGap(42)
+										.addComponent(btnClose, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))))
+							.addComponent(cboLectureID, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)))
 					.addGap(32))
 				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addGap(79)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 815, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(24, Short.MAX_VALUE))
+					.addContainerGap()
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 813, Short.MAX_VALUE)
+					.addGap(96))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -509,41 +508,40 @@ public class SchedulePanel extends JPanel {
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
 						.addComponent(txtScheduleID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(cboClassroomID, GroupLayout.PREFERRED_SIZE, 20, Short.MAX_VALUE)
-						.addComponent(lblNewLabel_7))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_3, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-						.addComponent(cboStartTime, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel_8)
-						.addComponent(cboLectureID, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+						.addComponent(cboStartTime, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+					.addGap(32)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNewLabel_4, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-						.addComponent(cboEndTime, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblNewLabel_6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(cboCourse, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+						.addComponent(cboCourse, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel_4, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+						.addComponent(cboEndTime, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+					.addGap(37)
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(startDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_1))
-							.addGap(18)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(endDate, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_2, Alignment.TRAILING)))
+						.addComponent(startDate, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-							.addComponent(btnCreate)
-							.addComponent(btnUpdate, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-							.addComponent(btnClose)))
-					.addGap(36)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE)
-					.addGap(92))
+							.addComponent(lblNewLabel_7)
+							.addComponent(cboClassroomID, GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+							.addComponent(lblNewLabel_1)))
+					.addGap(40)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(Alignment.TRAILING, groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lblNewLabel_8)
+							.addComponent(cboLectureID, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblNewLabel_2))
+						.addComponent(endDate, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(52)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnCreate)
+						.addComponent(btnUpdate, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnClose))
+					.addGap(35)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+					.addContainerGap())
 		);
 		
 		tblSchedule = new JTable();
-		scrollPane.setColumnHeaderView(tblSchedule);
+		scrollPane.setViewportView(tblSchedule);
         this.tblSchedule.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {			
             if (!tblSchedule.getSelectionModel().isSelectionEmpty()) {
             	
