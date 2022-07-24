@@ -152,6 +152,8 @@ public class stuNewReg extends JPanel {
 	
     private void resetFormData() {
         txtStuName.setText("");
+        txtCategoryName.setText("");
+        txtFee.setText("");
         cboCourseName.setSelectedIndex(0);
 	}
 
@@ -365,6 +367,13 @@ public class stuNewReg extends JPanel {
 		
 		
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetFormData();
+				autoID();
+				loadAllSchedule(Optional.empty());
+			}
+		});
 		cboCourseName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(cboCourseName.getSelectedIndex()!=0) {

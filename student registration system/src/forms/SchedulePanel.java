@@ -40,6 +40,8 @@ import entities.Course;
 import entities.Schedule;
 import services.CourseService;
 import services.ScheduleServices;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class SchedulePanel extends JPanel {
 	private JTextField txtScheduleID;
@@ -173,7 +175,7 @@ public class SchedulePanel extends JPanel {
         cboStartTime.setSelectedItem("-Selected-");
         cboEndTime.setSelectedItem("-Selected-");
         startDate.setDate(null);
-        endDate.setDate(null);
+        //endDate.setDate(null);
         
 	}
 	/**
@@ -207,6 +209,7 @@ public class SchedulePanel extends JPanel {
         cboEndTime.addItem(TimeString4);  
 		
 		startDate = new JDateChooser();
+		
 		startDate.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				if(evt.getPropertyName().equals("date")) {
@@ -223,6 +226,7 @@ public class SchedulePanel extends JPanel {
 		    		endDate.setDate(d);
 		    		//endDate.setDate(dateFormat.format(d));
 				}
+				
 				
 			}
 		});
@@ -548,10 +552,11 @@ public class SchedulePanel extends JPanel {
                 String id = tblSchedule.getValueAt(tblSchedule.getSelectedRow(), 0).toString();
                 schedule = scheduleServices.findById(id);
                 txtScheduleID.setText(schedule.getId());
-                cboStartTime.setSelectedItem(schedule.getstartTime());
-                cboEndTime.setSelectedItem(schedule.getendTime()); 
-                startDate.setDate(Date.valueOf(schedule.getstartDate()));
-                endDate.setDate(Date.valueOf(schedule.getendDate()));
+                //cboStartTime.setSelectedItem(schedule.getstartTime());
+                //cboEndTime.setSelectedItem(schedule.getendTime()); 
+                //startDate.setDate(Date.valueOf(schedule.getstartDate()));
+                //System.out.println(Date.valueOf(schedule.getstartDate()));
+                //endDate.setDate(Date.valueOf(schedule.getendDate()));
                 cboCourse.setSelectedItem((scheduleServices.findCourseName(schedule.getCourse())));
                 cboLectureID.setSelectedItem((scheduleServices.findLecturerName(schedule.getLecturer())));
                cboClassroomID.setSelectedItem((scheduleServices.findClassroomName(schedule.getClassroom())));

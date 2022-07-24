@@ -11,10 +11,18 @@ import javax.swing.JOptionPane;
 
 import config.DBConfig;
 import entities.Category;
+import entities.Course;
+
 import repositories.CategoryRepo;
+import repositories.CourseRepo;
+
+import shared.exception.AppException;
 public class CategoryService implements CategoryRepo {
-	
+	private CourseRepo courseRepo;
 	private final DBConfig dbConfig=new DBConfig();
+	public void setProductRepo(CourseRepo courseRepo) {
+        this.courseRepo = courseRepo;
+    }
 	 public void saveCategory(String id,Category category) {
 	        try {
 
@@ -181,5 +189,21 @@ public class CategoryService implements CategoryRepo {
 
         return category;
 	}
-	 
+	public boolean iscontain(String data)throws SQLException{
+		 String query="Select * from course where categoryID='"+data+"'";
+		 Statement st=this.dbConfig.getConnection().createStatement();
+		 ResultSet rs;
+		 try {
+			 rs=st.executeQuery(query);
+		 }catch(SQLException e) {
+			 e.printStackTrace();
+		 }
+		 rs=st.executeQuery(query);
+		 if(rs.next()) {
+			 return true;
+		 }
+		 else {
+			 return false;
+		 }
+	 } 
 }

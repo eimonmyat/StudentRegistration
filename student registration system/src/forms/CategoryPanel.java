@@ -159,19 +159,31 @@ public class CategoryPanel extends JPanel {
             }
         });
 		
-		JButton btnUpdate = new JButton("Update");
-		
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (null != category) {
-                    categoryService.deleteCategory(category.getId() + "");
-                    JOptionPane.showMessageDialog(null, "Delete successfully");
-                    resetFormData();
-                    autoID();
-                    loadAllCategories(Optional.empty());
-                    category = null;
-                } else {
+                	String data=txtCategoryID.getText();
+                	try {
+						boolean contain=categoryService.iscontain(data);
+						if(contain) {
+							JOptionPane.showMessageDialog(null, "This category has used in Course");
+						}
+						else {
+							categoryService.deleteCategory(category.getId() + "");
+		                    JOptionPane.showMessageDialog(null, "Delete successfully");
+		                    resetFormData();
+		                    autoID();
+		                    loadAllCategories(Optional.empty());
+		                    category = null;
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+                }
+                    
+                 else {
                     JOptionPane.showMessageDialog(null, "Choose Category");
                 }
             }
@@ -197,13 +209,11 @@ public class CategoryPanel extends JPanel {
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 477, GroupLayout.PREFERRED_SIZE)
 								.addGroup(groupLayout.createSequentialGroup()
-									.addGap(49)
+									.addGap(120)
 									.addComponent(btnCreate)
-									.addGap(34)
-									.addComponent(btnUpdate)
-									.addGap(28)
+									.addGap(58)
 									.addComponent(btnDelete)))))
-					.addContainerGap(79, Short.MAX_VALUE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -219,10 +229,9 @@ public class CategoryPanel extends JPanel {
 					.addGap(35)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnDelete)
-						.addComponent(btnUpdate)
 						.addComponent(btnCreate))
 					.addGap(49)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
 					.addGap(107))
 		);
 		

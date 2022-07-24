@@ -6,7 +6,9 @@ import java.util.List;
 import entities.Category;
 import entities.Course;
 
+
 public interface CourseRepo {
+	//List<Course> findProductsByBrandId(String brandId);
 	void saveCourse(Course course);
 
 	void updateCourse(Course course);

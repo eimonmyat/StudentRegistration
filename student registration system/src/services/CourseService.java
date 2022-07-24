@@ -247,4 +247,18 @@ public class CourseService implements CourseRepo {
 			 return null;
 		 }
 	}
+	public int getDuration(String id) {
+		try(Statement st = this.dbConfig.getConnection().createStatement()) {
+            String query = "SELECT duration FROM course where courseID='"+id+"'";
+            ResultSet rs = st.executeQuery(query);
+            int result=0;
+			 while(rs.next()) {
+				 result=rs.getInt("duration");
+			 }
+			 return result;
+		 }catch(SQLException e) {
+			 e.printStackTrace();
+			 return 0;
+		 }
+	}
 }

@@ -151,6 +151,7 @@ public class stuOldReg extends JPanel {
 	
     private void resetFormData() {
         txtStuID.setText("");
+        txtStuName.setText("");
         cboCourseName.setSelectedIndex(0);
 	}
 

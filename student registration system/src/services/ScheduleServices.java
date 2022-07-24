@@ -503,6 +503,18 @@ public class ScheduleServices implements ScheduleRepo{
 
 	    return result;
 	}
+	public String getCourseID(String id) {
+		try(Statement st=this.dbConfig.getConnection().createStatement()){
+			 String query="Select courseID from schedule where scheduleID='"+id+"'";
+			 ResultSet rs=st.executeQuery(query);
+			 rs.next();
+			 String result=rs.getString(1);
+               return result;
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	            return null;
+	        }
+	}
 }
 
 
