@@ -145,36 +145,26 @@ public class RegFrame extends JFrame {
 		lblNewLabel_1_1_2.setForeground(Color.WHITE);
 		lblNewLabel_1_1_2.setFont(new Font("Times New Roman", Font.BOLD, 18));
 		lblNewLabel_1_1_2.setHorizontalAlignment(SwingConstants.CENTER);
-		
-		JLabel lblNewLabel_1_1_3 = new JLabel("Log Out");
-		lblNewLabel_1_1_3.setForeground(Color.WHITE);
-		lblNewLabel_1_1_3.setFont(new Font("Times New Roman", Font.BOLD, 18));
-		lblNewLabel_1_1_3.setHorizontalAlignment(SwingConstants.CENTER);
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 		gl_panel_1.setHorizontalGroup(
 			gl_panel_1.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_1.createSequentialGroup()
-					.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
+					.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 901, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblNewLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblNewLabel_1_1, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblNewLabel_1_1_2, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblNewLabel_1_1_3, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-					.addGap(41))
+					.addGap(143))
 		);
 		gl_panel_1.setVerticalGroup(
 			gl_panel_1.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_1.createSequentialGroup()
-					.addComponent(lblNewLabel_1_1_3, GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
-					.addContainerGap())
-				.addGroup(gl_panel_1.createSequentialGroup()
-					.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
-						.addComponent(lblNewLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
-						.addComponent(lblNewLabel_1_1_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
-						.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+					.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+						.addComponent(lblNewLabel_1_1_1, GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+						.addGroup(Alignment.TRAILING, gl_panel_1.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lblNewLabel_1_1_2, GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
 							.addComponent(lblNewLabel_1_1, GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)))
 					.addContainerGap())

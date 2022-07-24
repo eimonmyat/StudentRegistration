@@ -40,12 +40,12 @@ public class CourseService implements CourseRepo {
 	        try {
 
 	            PreparedStatement ps = this.dbConfig.getConnection()
-	                    .prepareStatement("UPDATE Course SET courseName = ?, fee=?, duration=?, categoryID=?,  WHERE courseID = ?");
+	                    .prepareStatement("UPDATE Course SET courseName = ?, fee=?, duration=?, categoryID=?  WHERE courseID = ?");
 
 	            ps.setString(1, course.getName());
-	            ps.setString(3, course.getCategory().getId());
+	            ps.setString(4, course.getCategory().getId());
 	            ps.setDouble(2, course.getFee());
-	            ps.setInt(4,course.getDuration());
+	            ps.setInt(3,course.getDuration());
 	            ps.setString(5, course.getId());
 	            ps.executeUpdate();
 

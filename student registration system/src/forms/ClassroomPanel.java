@@ -109,14 +109,16 @@ public class ClassroomPanel extends JPanel {
 		btnSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	String st[]=new String[1];
-
+            	String s[]=new String[3];
                 if (null != classroom && classroom.getId() != null) {
                     classroom.setName(txtClassroom.getText());
                     classroom.setUsers(Integer.parseInt(txtClassSize.getText()));
                     if (!classroom.getName().isBlank()) {
-                    	st[0]=(String)txtClassroom.getText();
+                    	s[0]=(String)txtClassroom.getText();
+                    	s[1]=txtClassSize.getText();
+                    	s[2]=txtClassroomID.getText();
                     	try {
-                    		boolean ee=classroomService.isduplicate(st);
+                    		boolean ee=classroomService.isNotduplicate(s);
                     		if(ee) {
                     			JOptionPane.showMessageDialog(null, "Duplicate Record");
                     			autoID();
@@ -174,22 +176,6 @@ public class ClassroomPanel extends JPanel {
             }
         });
 		
-		JButton btnDelete = new JButton("Delete");
-		 btnDelete.addActionListener(new ActionListener() {
-	            public void actionPerformed(ActionEvent e) {
-	                if (null != classroom) {
-	                    classroomService.deleteClassroom(classroom.getId() + "");
-	                    JOptionPane.showMessageDialog(null, "Delete successfully");
-	                    resetFormData();
-	                    autoID();
-	                    loadAllCategories(Optional.empty());
-	                    classroom = null;
-	                } else {
-	                    JOptionPane.showMessageDialog(null, "Choose Classroom");
-	                }
-	            }
-	        });
-		
 		JButton btnClose = new JButton("Cancel");
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -216,17 +202,17 @@ public class ClassroomPanel extends JPanel {
 									.addComponent(lblNewLabel_2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 									.addComponent(lblNewLabel_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 									.addComponent(lblNewLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(btnClose, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(txtClassSize, Alignment.LEADING)
-									.addComponent(txtClassroom, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-									.addComponent(txtClassroomID, Alignment.LEADING)))))
-					.addContainerGap(71, Short.MAX_VALUE))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(txtClassSize, Alignment.LEADING)
+										.addComponent(txtClassroom, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
+										.addComponent(txtClassroomID, Alignment.LEADING)))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGap(50)
+									.addComponent(btnClose, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)))))
+					.addContainerGap(144, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -248,12 +234,11 @@ public class ClassroomPanel extends JPanel {
 						.addComponent(txtClassSize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(29)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnClose)
 						.addComponent(btnSave)
-						.addComponent(btnDelete))
+						.addComponent(btnClose))
 					.addGap(18)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 157, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(55, Short.MAX_VALUE))
+					.addContainerGap(144, Short.MAX_VALUE))
 		);
 		
 		tblClassroom = new JTable();

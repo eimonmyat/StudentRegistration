@@ -303,10 +303,10 @@ public class stuNewReg extends JPanel {
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {    
 				Student s=new Student();
-				String stuId=txtStuName.getText();
+				String stuId=txtStuID.getText();
 				String regId=txtRegID.getText();
-				s.setId(txtStuName.getText());
-				s.setName(txtStuID.getText());
+				s.setId(txtStuID.getText());
+				s.setName(txtStuName.getText());
 				
 				
 				if(!s.getName().isBlank() && !s.getId().isBlank()) {
@@ -326,7 +326,7 @@ public class stuNewReg extends JPanel {
 						schedule.setRegisterUser(Integer.parseInt(scheduleService.getField("registeredUser","schedule",id).get(0)));
 						
 						try {
-							boolean ee=registrationService.isDuplicateStu(id, txtStuName.getText());
+							boolean ee=registrationService.isDuplicateStu(id, txtStuID.getText());
 							if(ee) {
 								JOptionPane.showMessageDialog(null, "This student is already registered in this schedule!");
 							}

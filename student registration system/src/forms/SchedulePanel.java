@@ -100,7 +100,7 @@ public class SchedulePanel extends JPanel {
         dtm.addColumn("Classroom");
         dtm.addColumn("Total");
         this.tblSchedule.setModel(dtm);
-        setColumnWidth(0,40);
+        /*setColumnWidth(0,40);
         setColumnWidth(1,45);
         setColumnWidth(2,35);
         setColumnWidth(3,35);
@@ -108,7 +108,7 @@ public class SchedulePanel extends JPanel {
         setColumnWidth(5,40);
         setColumnWidth(6,50);
         setColumnWidth(7,40);
-        setColumnWidth(8,8);
+        setColumnWidth(8,8);*/
     }
 	public void setColumnWidth(int index,int width) {
 		DefaultTableColumnModel tcm=(DefaultTableColumnModel)tblSchedule.getColumnModel();
@@ -330,8 +330,8 @@ public class SchedulePanel extends JPanel {
 	        	             			else {
 	        	             				scheduleServices.saveSchedule(txtScheduleID.getText(), schedule);
 	        	             				JOptionPane.showMessageDialog(null, "Sucessfully saved.");
-	        	             				resetFormData();
-	        	             				autoID();                   				
+	        	             				autoID();
+	        	             				//setTableDesign();
 	        	             				loadAllCategories(Optional.empty());
 	        	             				schedule=null;
 	        	             				

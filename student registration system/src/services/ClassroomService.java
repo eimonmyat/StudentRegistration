@@ -40,7 +40,7 @@ public class ClassroomService implements ClassroomRepo {
 	                    .prepareStatement("UPDATE Classroom SET classroomName = ?, totalUsers=? WHERE classroomID = ?");
 
 	            ps.setString(1, Classroom.getName());
-	            ps.setInt(3, Classroom.getUsers());
+	            ps.setInt(2, Classroom.getUsers());
 	            ps.setString(3, id);
 	            ps.executeUpdate();
 
@@ -149,7 +149,7 @@ public class ClassroomService implements ClassroomRepo {
 		 
 	 }
 	 public boolean isduplicate(String[]data)throws SQLException{
-		 String query="Select * from Classroom where classroomName='"+data[0]+"'";
+		 String query="Select * from classroom where classroomName='"+data[0]+"'";
 		 Statement st=this.dbConfig.getConnection().createStatement();
 		 ResultSet rs;
 		 try {
@@ -191,5 +191,22 @@ public class ClassroomService implements ClassroomRepo {
 	            return 0;
 	        }
 	}
-	 
+	public boolean isNotduplicate(String[]data)throws SQLException{
+		int total=Integer.parseInt(data[1]);
+		 String query="Select * from classroom where classroomName='"+data[0]+"' and totalUsers="+total+" and classroomID='"+data[2]+"'";
+		 Statement st=this.dbConfig.getConnection().createStatement();
+		 ResultSet rs;
+		 try {
+			 rs=st.executeQuery(query);
+		 }catch(SQLException e) {
+			 e.printStackTrace();
+		 }
+		 rs=st.executeQuery(query);
+		 if(rs.next()) {
+			 return true;
+		 }
+		 else {
+			 return false;
+		 }
+	 }
 }

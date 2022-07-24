@@ -62,11 +62,12 @@ public class CoursePanel extends JPanel {
         List<Course> CourseList = optionalCourses.orElseGet(() -> origianlCourseList);
 
         CourseList.forEach(c -> {
-            Object[] row = new Object[4];
+            Object[] row = new Object[5];
             row[0] = c.getId();
             row[1] = c.getName();
             row[2]=c.getFee();
             row[3]=courseService.getCategoryName(c.getCategory().getId());
+            row[4]=c.getDuration();
             dtm.addRow(row);
         });
     }
@@ -77,6 +78,7 @@ public class CoursePanel extends JPanel {
         dtm.addColumn("Course Name");
         dtm.addColumn("Fee");
         dtm.addColumn("Category ID");
+        dtm.addColumn("Duration");
         this.tblCourse.setModel(dtm);
     }
 
@@ -105,11 +107,13 @@ public class CoursePanel extends JPanel {
 		txtCourseName.setText("");
 		txtFee.setText("");
 		cboCategoryName.setSelectedIndex(0);
+		txtDuration.setText("");
 		autoID();
 	}
 	private void resetFormData() {
         txtCourseName.setText("");
         txtFee.setText("");
+        txtDuration.setText("");
         cboCategoryName.setSelectedIndex(0);
 	}
 	/**
@@ -269,22 +273,6 @@ public class CoursePanel extends JPanel {
 			}
         });
 		
-		JButton btnDelete = new JButton("Delete");
-		btnDelete.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (null != course) {
-                    courseService.deleteCourse(course.getId() + "");
-                    JOptionPane.showMessageDialog(null, "Delete successfully");
-                    resetFormData();
-                    autoID();
-                    loadAllCourses(Optional.empty());
-                    course = null;
-                } else {
-                    JOptionPane.showMessageDialog(null, "Choose Category");
-                }
-            }
-        });
-		
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			@Override
@@ -329,10 +317,8 @@ public class CoursePanel extends JPanel {
 							.addGap(18)
 							.addComponent(btnUpdate, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
-							.addComponent(btnDelete, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
 							.addComponent(btnCancel, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(78, Short.MAX_VALUE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -357,11 +343,10 @@ public class CoursePanel extends JPanel {
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_4)
 						.addComponent(txtDuration, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnSave)
 						.addComponent(btnUpdate)
-						.addComponent(btnDelete)
 						.addComponent(btnCancel))
 					.addGap(18)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)
@@ -380,6 +365,7 @@ public class CoursePanel extends JPanel {
                 txtCourseName.setText(course.getName());
                 txtFee.setText(String.valueOf(course.getFee()));
                 String str=course.getCategory().getId();
+                txtDuration.setText(String.valueOf(course.getDuration()));
                 //String result=courseService.getCategoryName(str).get(0);
                 //System.out.println(result);
                 cboCategoryName.setSelectedItem(courseService.getCategoryName(str));

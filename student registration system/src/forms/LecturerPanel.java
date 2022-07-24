@@ -99,8 +99,6 @@ public class LecturerPanel extends JPanel {
 		
 		JButton btnSave = new JButton("Save");
 		
-		JButton btnDelete = new JButton("Delete");
-		
 		JButton btnClose = new JButton("Cancel");
 		
 		txtLecturerID = new JTextField();
@@ -131,7 +129,7 @@ public class LecturerPanel extends JPanel {
                     			lecturerService.updateLecturer(txtLecturerID.getText(), lecturer);
                                 resetFormData();
                                 autoID();
-                                //JOptionPane.showMessageDialog(null, "Update successful");
+                                JOptionPane.showMessageDialog(null, "Update successful");
                                 loadAllCategories(Optional.empty());
                                 lecturer = null;
                     		}
@@ -185,20 +183,6 @@ public class LecturerPanel extends JPanel {
     			
 			}
 		});
-		 btnDelete.addActionListener(new ActionListener() {
-	            public void actionPerformed(ActionEvent e) {
-	                if (null != lecturer) {
-	                    lecturerService.deleteLecturer(lecturer.getId() + "");
-	                    JOptionPane.showMessageDialog(null, "Delete successfully");
-	                    resetFormData();
-	                    autoID();
-	                    loadAllCategories(Optional.empty());
-	                    lecturer = null;
-	                } else {
-	                    JOptionPane.showMessageDialog(null, "Choose Lecturer");
-	                }
-	            }
-	        });
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -216,9 +200,7 @@ public class LecturerPanel extends JPanel {
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGap(32)
 									.addComponent(btnSave)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(btnDelete)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addGap(18)
 									.addComponent(btnClose))
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGap(33)
@@ -240,12 +222,11 @@ public class LecturerPanel extends JPanel {
 						.addComponent(txtLecturer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(17)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnClose)
-						.addComponent(btnDelete)
-						.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+						.addComponent(btnSave, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnClose))
 					.addGap(46)
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(118, Short.MAX_VALUE))
+					.addContainerGap(36, Short.MAX_VALUE))
 		);
 		
 		tblLecturer = new JTable();
